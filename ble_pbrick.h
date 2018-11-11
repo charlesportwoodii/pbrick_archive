@@ -30,7 +30,6 @@ NRF_SDH_BLE_OBSERVER(_name ## _obs, \
 #define PBRICK_MOTOR_CHAR_UUID  0x7063
 #define PBRICK_LIGHT_CHAR_UUID  0x7064
 
-
 /**@brief Custom Service init structure.
  *        This contains all options and data needed for
  *        initialization of the service.

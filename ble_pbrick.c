@@ -1,9 +1,18 @@
 #include "ble_pbrick.h"
+#include "pbrick_motor.h"
+#include "pbrick_light.h"
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "bsp.h"
 
 #include "sdk_common.h"
 #include "ble_srv_common.h"
 #include "nrf_gpio.h"
+#include "nrf.h"
 #include "boards.h"
+#include "pbrick_board.h"
 #include "nrf_log.h"
 
 /**@brief Function for handling the Connect event.
@@ -37,15 +46,29 @@ static void on_write(ble_pbrick_t * p_pbrick, ble_evt_t const * p_ble_evt)
     ble_gatts_evt_write_t const * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
 
     if (p_evt_write->handle == p_pbrick->motor_value_handles.value_handle) {
-        if (p_evt_write->data[0] == 0x00) {
-            nrf_gpio_pin_clear(LED2_R);
-            nrf_gpio_pin_set(LED2_G);
-        } else if (p_evt_write->data[0] == 0x01) {
-            nrf_gpio_pin_clear(LED2_G);
-            nrf_gpio_pin_set(LED2_R);
-        }
+        pbrick_motor0_set(p_evt_write->data[0], p_evt_write->data[1]);
     } else if (p_evt_write->handle == p_pbrick->lights_value_handles.value_handle) {
+        pbrick_light_set(p_evt_write->data[0], p_evt_write->data[1]);
     }
+}
+
+/** @brief Initializes the GPIO pins for all functions
+ *
+ * @param[in]   p_pbrick        Custom Service structure.
+ * @param[in]   p_pbrick_init   Information needed to initialize the service.
+ *
+ * @return      void
+ */
+static void gpio_init(
+    ble_pbrick_t * p_pbrick,
+    const ble_pbrick_init_t * p_pbrick_init
+)
+{
+    // Initialize motor0 control
+    pbrick_motor0_init();
+
+    // Initialize lighting control
+    pbrick_light_init();
 }
 
 uint32_t ble_pbrick_init(
@@ -84,9 +107,7 @@ uint32_t ble_pbrick_init(
     err_code = light_char_add(p_pbrick, p_pbrick_init);
     VERIFY_SUCCESS(err_code);
 
-    bsp_board_init(BSP_INIT_LEDS);
-    nrf_gpio_cfg_output(LED2_R);
-    nrf_gpio_cfg_output(LED2_G);
+    gpio_init(p_pbrick, p_pbrick_init);
     return NRF_SUCCESS;
 }
 
