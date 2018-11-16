@@ -91,17 +91,21 @@ void pbrick_light_right_blink();
 /**@brief Blinks the specified lights aT `delay` ms
  *
  * @param[in]       lights[]      An array of lights
+ * @param[in]       count         Size of lights[]
+ *
  * @return void
  */
-void pbrick_light_blink(uint32_t lights[]);
+void pbrick_light_blink(uint32_t lights[], uint8_t count);
 
 /**@brief Sets the light option for the given light
  *
  * @param[in]       lights[]    The light to toggle
+ * @param[in]       count       Size of lights[]
  * @param[in]       option      The option to perform
+ *
  * @return void
  */
-void pbrick_light_do_option(uint32_t lights[], uint8_t option);
+void pbrick_light_do_option(uint32_t lights[], uint8_t count, uint8_t option);
 
 #ifdef __cplusplus
 }
