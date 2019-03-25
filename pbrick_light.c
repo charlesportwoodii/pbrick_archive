@@ -30,6 +30,10 @@ void pbrick_light_init()
 #ifdef PBRICK_LIGHT_ACC2
     nrf_gpio_cfg_output(PBRICK_LIGHT_ACC2);
 #endif
+
+#ifdef PBRICK_AUTO_LIGHTS_ON_AT_BOOT
+    pbrick_light_set(0xFF, 0xFF);
+#endif
 }
 
 void pbrick_light_set(uint8_t light, uint8_t option)
