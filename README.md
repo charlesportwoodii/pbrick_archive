@@ -12,28 +12,7 @@ Pre-compiled versioned binaries ready for flashing are available on the [release
 
 ## Building
 
-### Dependencies
-
-1. [GNU Toolchain for ARM Cortex-M 8-2018-q4-major](https://developer.arm.com/tools-and-software/open-source-software/gnu-toolchain/gnu-rm/downloads)
-
-Extract and install to `PATH`.
-
-2. [Nordic SDK 15.3.0](https://www.nordicsemi.com/Software-and-Tools/Software/nRF5-SDK)
-
-Extract the Nordic SDK and set `NORDIC_SDK_PATH` environment variable to the extracted directory.
-
-> Note that you may need to adjust `components/toolchain/gcc/Makefile.posix` with the path to `gcc-arm-none-eabi-7-2018-q2-update/bin/`.
-
-
-3. [nRF Connect](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF-Connect-for-desktop)
-
-Used for flashing.
-
-4. [nRF Command Line Tools](https://www.nordicsemi.com/Software-and-Tools/Development-Tools/nRF5-Command-Line-Tools)
-
-Used for manual flashing. Extract tools and their dependencies and add to your `PATH`.
-
-### Compiling
+Take a look at the [Getting Started](https://github.com/charlesportwoodii/pbrick/wiki/Getting-Started) page for more information on the dependencies needed.
 
 With your dependencies installed you can compile the project for supported boards by running `make`
 
