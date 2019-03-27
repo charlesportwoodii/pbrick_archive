@@ -233,13 +233,13 @@ void pbrick_light_hazard_blink()
 {
     uint8_t count = 2;
 #ifdef PBRICK_LIGHT_LEFT_REAR
-        count++
+        count++;
 #endif
 #ifdef PBRICK_LIGHT_RIGHT_REAR
-        count++
+        count++;
 #endif
 #ifdef PBRICK_LIGHT_LOW
-        count++
+        count++;
 #endif
 
     uint32_t lights[] = {
@@ -262,7 +262,7 @@ void pbrick_light_left_blink()
 {
     uint8_t count = 1;
 #ifdef PBRICK_LIGHT_RIGHT_REAR
-        count++
+        count++;
 #endif
     uint32_t lights[] = {
         PBRICK_LIGHT_RIGHT_FRONT
@@ -277,7 +277,7 @@ void pbrick_light_right_blink()
 {
     uint8_t count = 1;
 #ifdef PBRICK_LIGHT_LEFT_REAR
-        count++
+        count++;
 #endif
     uint32_t lights[] = {
         PBRICK_LIGHT_LEFT_FRONT

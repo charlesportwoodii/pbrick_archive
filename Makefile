@@ -1,6 +1,9 @@
 BOARD?=
 
 default: check-env
+ifeq ($(BOARD),)
+	$(error Specified a board to build pca10059, mdk-usb-dongle, sparkfun-pro-mini)
+endif
 ifeq ($(BOARD), pca10059)
 	$(MAKE) pca10059
 endif
@@ -13,17 +16,18 @@ endif
 
 clean: check-env
 ifeq ($(BOARD), pca10059)
-	cd pca10059/s140/armgcc && $(MAKE) clean
+	cd boards/pca10059/s140/armgcc && $(MAKE) clean
 endif
 ifeq ($(BOARD), mdk-usb-dongle)
-	cd mdk-usb-dongle/s140/armgcc && $(MAKE) clean
+	cd boards/mdk-usb-dongle/s140/armgcc && $(MAKE) clean
 endif
 ifeq ($(BOARD), sparkfun-pro-mini)
-	cd sparkfun-pro-mini/s140/armgcc && $(MAKE) clean
+	cd boards/sparkfun-pro-mini/s140/armgcc && $(MAKE) clean
 endif
-#cd pca10059/s140/armgcc && $(MAKE) clean
-#cd mdk-usb-dongle/s140/armgcc && $(MAKE) clean
-#cd sparkfun-pro-mini/s140/armgcc && $(MAKE) clean
+
+	cd boards/pca10059/s140/armgcc && $(MAKE) clean
+	cd boards/mdk-usb-dongle/s140/armgcc && $(MAKE) clean
+	cd boards/sparkfun-pro-mini/s140/armgcc && $(MAKE) clean
 
 .PHONY: check-env
 check-env:
@@ -33,12 +37,12 @@ endif
 
 .PHONY: pca10059
 pca10059: check-env
-	$(MAKE) -C pca10059/s140/armgcc
+	$(MAKE) -C boards/pca10059/s140/armgcc
 
 .PHONY: mdk-usb-dongle
 mdk-usb-dongle: check-env
-	$(MAKE) -C mdk-usb-dongle/s140/armgcc
+	$(MAKE) -C boards/mdk-usb-dongle/s140/armgcc
 
 .PHONE: sparkfun-pro-mini
 sparkfun-pro-mini: check-env
-	$(MAKE) -C sparkfun-pro-mini/s140/armgcc
+	$(MAKE) -C boards/sparkfun-pro-mini/s140/armgcc
