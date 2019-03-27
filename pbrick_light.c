@@ -7,11 +7,16 @@ void pbrick_light_init()
 {
     bsp_board_init(BSP_INIT_LEDS);
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_FRONT);
-    nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_REAR);
     nrf_gpio_cfg_output(PBRICK_LIGHT_RIGHT_FRONT);
+#ifdef PBRICK_LIGHT_LEFT_REAR
+    nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_REAR);
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
     nrf_gpio_cfg_output(PBRICK_LIGHT_RIGHT_REAR);
+#endif
+#ifdef PBRICK_LIGHT_LOW
     nrf_gpio_cfg_output(PBRICK_LIGHT_LOW);
-    nrf_gpio_cfg_output(PBRICK_LIGHT_HIGH);
+#endif
 
 // Accessories are defined per board
 #ifdef PBRICK_LIGHT_ACC0
@@ -24,6 +29,10 @@ void pbrick_light_init()
 
 #ifdef PBRICK_LIGHT_ACC2
     nrf_gpio_cfg_output(PBRICK_LIGHT_ACC2);
+#endif
+
+#ifdef PBRICK_AUTO_LIGHTS_ON_AT_BOOT
+    pbrick_light_set(0xFF, 0xFF);
 #endif
 }
 
@@ -82,12 +91,18 @@ void pbrick_light_off()
 #endif
 
     uint32_t lights[] = {
-        PBRICK_LIGHT_LOW,
         PBRICK_LIGHT_HIGH,
         PBRICK_LIGHT_LEFT_FRONT,
-        PBRICK_LIGHT_RIGHT_FRONT,
-        PBRICK_LIGHT_LEFT_REAR,
-        PBRICK_LIGHT_RIGHT_REAR
+        PBRICK_LIGHT_RIGHT_FRONT
+#ifdef PBRICK_LIGHT_LOW
+        ,PBRICK_LIGHT_LOW
+#endif
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        ,PBRICK_LIGHT_LEFT_REAR
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        ,PBRICK_LIGHT_RIGHT_REAR
+#endif
 #ifdef PBRICK_LIGHT_ACC0
         ,PBRICK_LIGHT_ACC0
 #endif
@@ -104,7 +119,7 @@ void pbrick_light_off()
 
 void pbrick_light_on()
 {
-    uint8_t count = 6;
+    uint8_t count = 3;
 #ifdef PBRICK_LIGHT_ACC0
         count++;
 #endif
@@ -114,14 +129,29 @@ void pbrick_light_on()
 #ifdef PBRICK_LIGHT_ACC2
         count++;
 #endif
+#ifdef PBRICK_LIGHT_LOW
+        count++;
+#endif
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        count++;
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        count++;
+#endif
 
     uint32_t lights[] = {
-        PBRICK_LIGHT_LOW,
         PBRICK_LIGHT_HIGH,
         PBRICK_LIGHT_LEFT_FRONT,
-        PBRICK_LIGHT_RIGHT_FRONT,
-        PBRICK_LIGHT_LEFT_REAR,
-        PBRICK_LIGHT_RIGHT_REAR
+        PBRICK_LIGHT_RIGHT_FRONT
+#ifdef PBRICK_LIGHT_LOW
+        ,PBRICK_LIGHT_LOW
+#endif
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        ,PBRICK_LIGHT_LEFT_REAR
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        ,PBRICK_LIGHT_RIGHT_REAR
+#endif
 #ifdef PBRICK_LIGHT_ACC0
         ,PBRICK_LIGHT_ACC0
 #endif
@@ -138,20 +168,30 @@ void pbrick_light_on()
 
 void pbrick_light_low(uint8_t option)
 {
+#ifdef PBRICK_LIGHT_LOW
     uint32_t lights[] = {
         PBRICK_LIGHT_LOW
     };
     return pbrick_light_do_option(lights, 1, option);
+#endif
+    return;
 }
+
 
 void pbrick_light_main(uint8_t option)
 {
     uint32_t lights[] = {
         PBRICK_LIGHT_LEFT_FRONT,
-        PBRICK_LIGHT_RIGHT_FRONT,
-        PBRICK_LIGHT_LEFT_REAR,
-        PBRICK_LIGHT_RIGHT_REAR,
-        PBRICK_LIGHT_LOW
+        PBRICK_LIGHT_RIGHT_FRONT
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        ,PBRICK_LIGHT_LEFT_REAR
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        ,PBRICK_LIGHT_RIGHT_REAR
+#endif
+#ifdef PBRICK_LIGHT_LOW
+        ,PBRICK_LIGHT_LOW
+#endif
     };
     return pbrick_light_do_option(lights, 5, option);
 }
@@ -191,32 +231,61 @@ void pbrick_light_blink_ctl(uint8_t option)
 
 void pbrick_light_hazard_blink()
 {
+    uint8_t count = 2;
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        count++;
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        count++;
+#endif
+#ifdef PBRICK_LIGHT_LOW
+        count++;
+#endif
+
     uint32_t lights[] = {
         PBRICK_LIGHT_LEFT_FRONT,
-        PBRICK_LIGHT_RIGHT_FRONT,
-        PBRICK_LIGHT_LEFT_REAR,
-        PBRICK_LIGHT_RIGHT_REAR,
-        PBRICK_LIGHT_LOW
+        PBRICK_LIGHT_RIGHT_FRONT
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        ,PBRICK_LIGHT_LEFT_REAR
+#endif
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        ,PBRICK_LIGHT_RIGHT_REAR
+#endif
+#ifdef PBRICK_LIGHT_LOW
+        ,PBRICK_LIGHT_LOW
+#endif
     };
-    return pbrick_light_blink(lights, 5);
+    return pbrick_light_blink(lights, count);
 }
 
 void pbrick_light_left_blink()
 {
+    uint8_t count = 1;
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        count++;
+#endif
     uint32_t lights[] = {
-        PBRICK_LIGHT_RIGHT_FRONT,
-        PBRICK_LIGHT_RIGHT_REAR
+        PBRICK_LIGHT_RIGHT_FRONT
+#ifdef PBRICK_LIGHT_RIGHT_REAR
+        ,PBRICK_LIGHT_RIGHT_REAR
+#endif
     };
-    return pbrick_light_blink(lights, 2);
+    return pbrick_light_blink(lights, count);
 }
 
 void pbrick_light_right_blink()
 {
+    uint8_t count = 1;
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        count++;
+#endif
     uint32_t lights[] = {
-        PBRICK_LIGHT_LEFT_FRONT,
-        PBRICK_LIGHT_LEFT_REAR
+        PBRICK_LIGHT_LEFT_FRONT
+#ifdef PBRICK_LIGHT_LEFT_REAR
+        ,PBRICK_LIGHT_LEFT_REAR
+#endif
     };
-    return pbrick_light_blink(lights, 2);
+    return pbrick_light_blink(lights, count);
 }
 
 void pbrick_light_blink(uint32_t lights[], uint8_t count)

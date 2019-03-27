@@ -128,10 +128,14 @@ uint32_t motor_char_add(
 
     memset(&char_md, 0, sizeof(char_md));
 
+    static char user_desc[] = "Motor 1";
+    char_md.p_char_user_desc  = (uint8_t *) user_desc;
+    char_md.char_user_desc_size = strlen(user_desc);
+    char_md.char_user_desc_max_size = strlen(user_desc);
+
     char_md.char_props.read   = 1;
     char_md.char_props.write  = 1;
     char_md.char_props.notify = 0;
-    char_md.p_char_user_desc  = NULL;
     char_md.p_char_pf         = NULL;
     char_md.p_user_desc_md    = NULL;
     char_md.p_cccd_md         = NULL;
@@ -181,10 +185,14 @@ uint32_t light_char_add(
 
     memset(&char_md, 0, sizeof(char_md));
 
+    static char user_desc[] = "Lighting";
+    char_md.p_char_user_desc  = (uint8_t *) user_desc;
+    char_md.char_user_desc_size = strlen(user_desc);
+    char_md.char_user_desc_max_size = strlen(user_desc);
+
     char_md.char_props.read   = 1;
     char_md.char_props.write  = 1;
     char_md.char_props.notify = 0;
-    char_md.p_char_user_desc  = NULL;
     char_md.p_char_pf         = NULL;
     char_md.p_user_desc_md    = NULL;
     char_md.p_cccd_md         = NULL;

@@ -44,6 +44,7 @@ extern "C" {
 #define PBRICK_LIGHT_ACC1           NRF_GPIO_PIN_MAP(1, 15)
 #define PBRICK_LIGHT_ACC2           NRF_GPIO_PIN_MAP(1, 13)
 
+#define PBRICK_AUTO_LIGHTS_ON_AT_BOOT 1
 #ifdef __cplusplus
 }
 #endif
