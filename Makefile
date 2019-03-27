@@ -25,9 +25,11 @@ ifeq ($(BOARD), sparkfun-pro-mini)
 	cd boards/sparkfun-pro-mini/s140/armgcc && $(MAKE) clean
 endif
 
+ifeq $(BOARD,)
 	cd boards/pca10059/s140/armgcc && $(MAKE) clean
 	cd boards/mdk-usb-dongle/s140/armgcc && $(MAKE) clean
 	cd boards/sparkfun-pro-mini/s140/armgcc && $(MAKE) clean
+endif
 
 .PHONY: check-env
 check-env:
