@@ -15,6 +15,13 @@ all: check-env $(BOARD_LIST)
 $(BOARD_LIST):
 	$(MAKE) -C boards/$@/s140/armgcc
 
+flash:
+ifneq ($(filter $(BOARD),$(BOARD_LIST)),)
+	$(MAKE) bootload -C boards/$(BOARD)/s140/armgcc
+else
+	$(error Run `make` with a board specified: ($(BOARD_LIST)))
+endif
+
 clean: check-env
 ifneq ($(filter $(BOARD),$(BOARD_LIST)),)
 	@cd boards/$(BOARD)/s140/armgcc && $(MAKE) $(BOARD)
