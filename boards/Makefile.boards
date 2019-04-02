@@ -313,7 +313,7 @@ bootload: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex dfu-package
 	@echo Flashing: $<
 	adafruit-nrfutil --verbose dfu serial --package $(PROJ_DIR)/_build_$(BOARD_NAME)/dfu-package.zip -p $(SERIAL_PORT) -b 115200  --flowcontrol --singlebank --touch 1200
 
-SDK_CONFIG_FILE := config/sdk_config.h
+SDK_CONFIG_FILE := sdk_config.h
 CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
 
 sdk_config:
