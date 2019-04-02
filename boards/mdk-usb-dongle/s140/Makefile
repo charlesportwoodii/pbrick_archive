@@ -1,6 +1,4 @@
-include ../../../Makefile.boards
-
-PROJECT_NAME := pbrick_mdk_dongle_s140
+include ../../Makefile.boards
 
 CFLAGS += -DBOARD_CUSTOM
 #CFLAGS += -DCONFIG_GPIO_AS_PINRESET

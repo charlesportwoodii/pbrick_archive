@@ -1,6 +1,4 @@
-include ../../../Makefile.boards
-
-PROJECT_NAME := pbrick_pca10059_s140
+include ../../Makefile.boards
 
 CFLAGS += -DBOARD_PCA10059
 CFLAGS += -DCONFIG_GPIO_AS_PINRESET
