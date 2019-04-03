@@ -1363,6 +1363,13 @@
 #define NRF_DFU_BLE_ADV_NAME "PBRICK-DFU"
 #endif
 
+// <q> NRF_DFU_APP_ACCEPT_SAME_VERSION  - Allows the same version to be flashed.
+
+
+#ifndef NRF_DFU_APP_ACCEPT_SAME_VERSION
+#define NRF_DFU_APP_ACCEPT_SAME_VERSION 1
+#endif
+
 // </h>
 //==========================================================
 
