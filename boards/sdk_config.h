@@ -1346,7 +1346,7 @@
 
 
 #ifndef BLE_DFU_ENABLED
-#define BLE_DFU_ENABLED 0
+#define BLE_DFU_ENABLED 1
 #endif
 
 // <q> NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS  - Buttonless DFU supports bonds.
@@ -1354,6 +1354,13 @@
 
 #ifndef NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS
 #define NRF_DFU_BLE_BUTTONLESS_SUPPORTS_BONDS 0
+#endif
+
+// <q> NRF_DFU_BLE_ADV_NAME  - Default DFU advertisement name.
+
+
+#ifndef NRF_DFU_BLE_ADV_NAME
+#define NRF_DFU_BLE_ADV_NAME "PBRICK-DFU"
 #endif
 
 // </h>
@@ -7212,7 +7219,7 @@
 
 
 #ifndef NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY
-#define NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY 0
+#define NRF_PWR_MGMT_CONFIG_AUTO_SHUTDOWN_RETRY 1
 #endif
 
 // <q> NRF_PWR_MGMT_CONFIG_USE_SCHEDULER  - Module will use @ref app_scheduler.
@@ -12452,7 +12459,7 @@
 
 // <o> NRF_SDH_BLE_VS_UUID_COUNT - The number of vendor-specific UUIDs.
 #ifndef NRF_SDH_BLE_VS_UUID_COUNT
-#define NRF_SDH_BLE_VS_UUID_COUNT 1
+#define NRF_SDH_BLE_VS_UUID_COUNT 2
 #endif
 
 // <q> NRF_SDH_BLE_SERVICE_CHANGED  - Include the Service Changed characteristic in the Attribute Table.

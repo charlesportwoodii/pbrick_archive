@@ -88,6 +88,12 @@ SRC_FILES += \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_ppi.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_ppi.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_timer.c \
+  $(SDK_ROOT)/components/libraries/bootloader/nrf_bootloader_info.c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_dfu/ble_dfu.c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_dfu/ble_dfu_bonded.c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_dfu/ble_dfu_unbonded.c \
+  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_svci.c \
+  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_svci_handler.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -221,6 +227,10 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/nfc/ndef/conn_hand_parser/ac_rec_parser \
   $(SDK_ROOT)/components/libraries/stack_guard \
   $(SDK_ROOT)/components/libraries/log/src \
+  $(SDK_ROOT)/components/libraries/bootloader \
+  $(SDK_ROOT)/components/ble/ble_services/ble_dfu \
+  $(SDK_ROOT)/components/libraries/bootloader/dfu \
+  $(SDK_ROOT)/components/libraries/bootloader/ble_dfu \
   $(BOARD_DIR)/include \
 
 # Libraries common to all targets
@@ -235,6 +245,8 @@ OPT = -O3 -g3
 CFLAGS += $(OPT)
 CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DNRF52840_XXAA
+CFLAGS += -DNRF_DFU_SVCI_ENABLED
+CFLAGS += -DNRF_DFU_TRANSPORT_BLE=1
 CFLAGS += -DNRF_SD_BLE_API_VERSION=6
 CFLAGS += -DS140
 CFLAGS += -DSOFTDEVICE_PRESENT
@@ -257,6 +269,8 @@ ASMFLAGS += -mthumb -mabi=aapcs
 ASMFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
 ASMFLAGS += -DFLOAT_ABI_HARD
 ASMFLAGS += -DNRF52840_XXAA
+ASMFLAGS += -DNRF_DFU_SVCI_ENABLED
+ASMFLAGS += -DNRF_DFU_TRANSPORT_BLE=1
 ASMFLAGS += -DNRF_SD_BLE_API_VERSION=6
 ASMFLAGS += -DS140
 ASMFLAGS += -DSOFTDEVICE_PRESENT
