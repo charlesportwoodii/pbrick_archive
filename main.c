@@ -89,7 +89,7 @@
 #define APP_BLE_OBSERVER_PRIO           3                                       /**< Application's BLE observer priority. You shouldn't need to modify this value. */
 #define APP_BLE_CONN_CFG_TAG            1                                       /**< A tag identifying the SoftDevice BLE configuration. */
 
-#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(100, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (0.1 seconds). */
+#define MIN_CONN_INTERVAL               MSEC_TO_UNITS(15, UNIT_1_25_MS)        /**< Minimum acceptable connection interval (0.1 seconds). */
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(200, UNIT_1_25_MS)        /**< Maximum acceptable connection interval (0.2 second). */
 #define SLAVE_LATENCY                   0                                       /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)         /**< Connection supervisory timeout (4 seconds). */
@@ -187,8 +187,7 @@ NRF_PWR_MGMT_HANDLER_REGISTER(app_shutdown_handler, 0);
 
 static void buttonless_dfu_sdh_state_observer(nrf_sdh_state_evt_t state, void * p_context)
 {
-    if (state == NRF_SDH_EVT_STATE_DISABLED)
-    {
+    if (state == NRF_SDH_EVT_STATE_DISABLED) {
         // Softdevice was disabled before going into reset. Inform bootloader to skip CRC on next boot.
         nrf_power_gpregret2_set(BOOTLOADER_DFU_SKIP_CRC);
 
@@ -219,12 +218,9 @@ static void disconnect(uint16_t conn_handle, void * p_context)
     UNUSED_PARAMETER(p_context);
 
     ret_code_t err_code = sd_ble_gap_disconnect(conn_handle, BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-    if (err_code != NRF_SUCCESS)
-    {
+    if (err_code != NRF_SUCCESS) {
         NRF_LOG_WARNING("Failed to disconnect connection. Connection handle: %d Error: %d", conn_handle, err_code);
-    }
-    else
-    {
+    } else{
         NRF_LOG_DEBUG("Disconnected connection handle %d", conn_handle);
     }
 }
@@ -238,8 +234,7 @@ static void disconnect(uint16_t conn_handle, void * p_context)
  */
 static void ble_dfu_evt_handler(ble_dfu_buttonless_evt_type_t event)
 {
-    switch (event)
-    {
+    switch (event) {
         case BLE_DFU_EVT_BOOTLOADER_ENTER_PREPARE:
         {
             NRF_LOG_INFO("Device is preparing to enter bootloader mode.");
@@ -310,8 +305,7 @@ static void pm_evt_handler(pm_evt_t const * p_evt)
     pm_handler_on_pm_evt(p_evt);
     pm_handler_flash_clean(p_evt);
 
-    switch (p_evt->evt_id)
-    {
+    switch (p_evt->evt_id) {
         case PM_EVT_PEERS_DELETE_SUCCEEDED:
             advertising_start(false);
             break;
@@ -540,8 +534,7 @@ static void on_adv_evt(ble_adv_evt_t ble_adv_evt)
 {
     ret_code_t err_code;
 
-    switch (ble_adv_evt)
-    {
+    switch (ble_adv_evt) {
         case BLE_ADV_EVT_FAST:
             NRF_LOG_INFO("Fast advertising.");
             err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
@@ -567,8 +560,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
 {
     ret_code_t err_code = NRF_SUCCESS;
 
-    switch (p_ble_evt->header.evt_id)
-    {
+    switch (p_ble_evt->header.evt_id) {
         case BLE_GAP_EVT_DISCONNECTED:
             NRF_LOG_INFO("Disconnected.");
             // LED indication will be changed when advertising starts.
@@ -699,8 +691,7 @@ static void bsp_event_handler(bsp_event_t event)
 {
     ret_code_t err_code;
 
-    switch (event)
-    {
+    switch (event) {
         case BSP_EVENT_SLEEP:
             sleep_mode_enter();
             break; // BSP_EVENT_SLEEP
@@ -803,8 +794,7 @@ static void power_management_init(void)
  */
 static void idle_state_handle(void)
 {
-    if (NRF_LOG_PROCESS() == false)
-    {
+    if (NRF_LOG_PROCESS() == false) {
         nrf_pwr_mgmt_run();
     }
 }
