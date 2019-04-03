@@ -21,9 +21,6 @@ SECTIONS
   } > uicr_bootloader_start_address
 }
 
-SECTIONS
-{
-}
 
 SECTIONS
 {
