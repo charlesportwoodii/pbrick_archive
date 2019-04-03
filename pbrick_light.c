@@ -8,6 +8,8 @@ void pbrick_light_init()
     bsp_board_init(BSP_INIT_LEDS);
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_FRONT);
     nrf_gpio_cfg_output(PBRICK_LIGHT_RIGHT_FRONT);
+    nrf_gpio_cfg_output(PBRICK_LIGHT_HIGH);
+    
 #ifdef PBRICK_LIGHT_LEFT_REAR
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_REAR);
 #endif

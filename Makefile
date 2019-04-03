@@ -29,7 +29,7 @@ ifneq ($(filter $(BOARD),$(BOARD_LIST)),)
 else
 	@for board in $(BOARD_LIST); do \
 		cd boards/$$board/s140 && $(MAKE) clean; \
-		cd ../../../..; \
+		cd ../../..; \
 	done
 	@rm -f *.hex
 endif

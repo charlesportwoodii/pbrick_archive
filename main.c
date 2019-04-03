@@ -194,7 +194,7 @@ static void gap_params_init(void)
     ret_code_t              err_code;
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
-    ble_gap_privacy_params_t prvt_conf;
+    //ble_gap_privacy_params_t prvt_conf;
 
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
 
@@ -217,12 +217,14 @@ static void gap_params_init(void)
     err_code = sd_ble_gap_ppcp_set(&gap_conn_params);
     APP_ERROR_CHECK(err_code);
 
+    /*
     memset(&prvt_conf, 0, sizeof(prvt_conf));
     prvt_conf.privacy_mode = BLE_GAP_PRIVACY_MODE_DEVICE_PRIVACY;
     prvt_conf.private_addr_type = BLE_GAP_ADDR_TYPE_RANDOM_PRIVATE_RESOLVABLE ;
     prvt_conf.private_addr_cycle_s = 0;
     err_code = sd_ble_gap_privacy_set(&prvt_conf);
     APP_ERROR_CHECK(err_code);
+    */
 }
 
 

@@ -15,7 +15,7 @@ extern "C" {
 // On board LEDS
 #define PBRICK_LED1                 LED_1
 #define PBRICK_LED2                 LED_2
-#define PBRICK_LED3                 LED_3
+//#define PBRICK_LED3                 LED_3
 //#define PBRICK_LED4                 LED_4
 
 // Motor control
@@ -26,7 +26,7 @@ extern "C" {
 // LED definitions
 
 // Highbeams
-#define PBRICK_LIGHT_HIGH           NRF_GPIO_PIN_MAP(1, 21)
+#define PBRICK_LIGHT_HIGH           NRF_GPIO_PIN_MAP(0, 21)
 
 // Main headlights
 #define PBRICK_LIGHT_LEFT_FRONT     NRF_GPIO_PIN_MAP(0, 22)
