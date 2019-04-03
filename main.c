@@ -515,17 +515,17 @@ static void application_timers_start(void)
  */
 static void sleep_mode_enter(void)
 {
-    ret_code_t err_code;
+    uint32_t err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 
-    err_code = bsp_indication_set(BSP_INDICATE_IDLE);
     APP_ERROR_CHECK(err_code);
 
     // Prepare wakeup buttons.
     err_code = bsp_btn_ble_sleep_mode_prepare();
     APP_ERROR_CHECK(err_code);
 
-    // Go to system-off mode (this function will not return; wakeup will cause a reset).
-    err_code = sd_power_system_off();
+    //Disable SoftDevice. It is required to be able to write to GPREGRET2 register (SoftDevice API blocks it).
+    //GPREGRET2 register holds the information about skipping CRC check on next boot.
+    err_code = nrf_sdh_disable_request();
     APP_ERROR_CHECK(err_code);
 }
 
@@ -747,6 +747,8 @@ static void advertising_init(void)
     init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
     init.config.ble_adv_fast_timeout  = APP_ADV_DURATION;
 
+    advertising_config_get(&init.config);
+
     init.evt_handler = on_adv_evt;
 
     err_code = ble_advertising_init(&m_advertising, &init);
@@ -779,7 +781,7 @@ static void buttons_leds_init(bool * p_erase_bonds)
  */
 static void log_init(void)
 {
-    ret_code_t err_code = NRF_LOG_INIT(NULL);
+    uint32_t err_code = NRF_LOG_INIT(NULL);
     APP_ERROR_CHECK(err_code);
 
     NRF_LOG_DEFAULT_BACKENDS_INIT();
@@ -790,8 +792,7 @@ static void log_init(void)
  */
 static void power_management_init(void)
 {
-    ret_code_t err_code;
-    err_code = nrf_pwr_mgmt_init();
+    uint32_t err_code = nrf_pwr_mgmt_init();
     APP_ERROR_CHECK(err_code);
 }
 
@@ -815,11 +816,12 @@ static void advertising_start(bool erase_bonds)
 {
     if (erase_bonds == true) {
         delete_bonds();
-        // Advertising is started by PM_EVT_PEERS_DELETED_SUCEEDED event
+        // Advertising is started by PM_EVT_PEERS_DELETE_SUCCEEDED event.
     } else {
-        ret_code_t err_code = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
-
+        uint32_t err_code = ble_advertising_start(&m_advertising, BLE_ADV_MODE_FAST);
         APP_ERROR_CHECK(err_code);
+
+        NRF_LOG_DEBUG("advertising is started");
     }
 }
 
@@ -829,7 +831,6 @@ static void advertising_start(bool erase_bonds)
 int main(void)
 {
     bool erase_bonds;
-
     ret_code_t err_code;
 
     log_init();
@@ -849,9 +850,10 @@ int main(void)
     conn_params_init();
     peer_manager_init();
 
+    NRF_LOG_INFO("Buttonless DFU Application started.");
+
     // Start execution.
     application_timers_start();
-
     advertising_start(erase_bonds);
 
     // Enter main loop.
