@@ -81,17 +81,6 @@ void pbrick_light_set(uint8_t light, uint8_t option)
 
 void pbrick_light_off()
 {
-    uint8_t count = 6;
-#ifdef PBRICK_LIGHT_ACC0
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_ACC1
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_ACC2
-        count++;
-#endif
-
     uint32_t lights[] = {
         PBRICK_LIGHT_HIGH,
         PBRICK_LIGHT_LEFT_FRONT,
@@ -116,31 +105,12 @@ void pbrick_light_off()
 #endif
     };
 
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
     return pbrick_light_do_option(lights, count, 0x00);
 }
 
 void pbrick_light_on()
 {
-    uint8_t count = 3;
-#ifdef PBRICK_LIGHT_ACC0
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_ACC1
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_ACC2
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_LOW
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_LEFT_REAR
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_RIGHT_REAR
-        count++;
-#endif
-
     uint32_t lights[] = {
         PBRICK_LIGHT_HIGH,
         PBRICK_LIGHT_LEFT_FRONT,
@@ -165,6 +135,7 @@ void pbrick_light_on()
 #endif
     };
 
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
     return pbrick_light_do_option(lights, count, 0x01);
 }
 
@@ -174,7 +145,9 @@ void pbrick_light_low(uint8_t option)
     uint32_t lights[] = {
         PBRICK_LIGHT_LOW
     };
-    return pbrick_light_do_option(lights, 1, option);
+
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
+    return pbrick_light_do_option(lights, count, option);
 #endif
     return;
 }
@@ -195,7 +168,9 @@ void pbrick_light_main(uint8_t option)
         ,PBRICK_LIGHT_LOW
 #endif
     };
-    return pbrick_light_do_option(lights, 5, option);
+
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
+    return pbrick_light_do_option(lights, count, option);
 }
 
 void pbrick_light_high(uint8_t option)
@@ -203,7 +178,9 @@ void pbrick_light_high(uint8_t option)
     uint32_t lights[] = {
         PBRICK_LIGHT_HIGH
     };
-    return pbrick_light_do_option(lights, 1, option);
+
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
+    return pbrick_light_do_option(lights, count, option);
 }
 
 void pbrick_light_acc(uint32_t acc, uint8_t option)
@@ -211,7 +188,8 @@ void pbrick_light_acc(uint32_t acc, uint8_t option)
     uint32_t lights[] = {
         acc
     };
-    return pbrick_light_do_option(lights, 1, option);
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
+    return pbrick_light_do_option(lights, count, option);
 }
 
 void pbrick_light_blink_ctl(uint8_t option)
@@ -233,17 +211,6 @@ void pbrick_light_blink_ctl(uint8_t option)
 
 void pbrick_light_hazard_blink()
 {
-    uint8_t count = 2;
-#ifdef PBRICK_LIGHT_LEFT_REAR
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_RIGHT_REAR
-        count++;
-#endif
-#ifdef PBRICK_LIGHT_LOW
-        count++;
-#endif
-
     uint32_t lights[] = {
         PBRICK_LIGHT_LEFT_FRONT,
         PBRICK_LIGHT_RIGHT_FRONT
@@ -257,36 +224,34 @@ void pbrick_light_hazard_blink()
         ,PBRICK_LIGHT_LOW
 #endif
     };
+
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
     return pbrick_light_blink(lights, count);
 }
 
 void pbrick_light_left_blink()
 {
-    uint8_t count = 1;
-#ifdef PBRICK_LIGHT_RIGHT_REAR
-        count++;
-#endif
     uint32_t lights[] = {
         PBRICK_LIGHT_RIGHT_FRONT
 #ifdef PBRICK_LIGHT_RIGHT_REAR
         ,PBRICK_LIGHT_RIGHT_REAR
 #endif
     };
+
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
     return pbrick_light_blink(lights, count);
 }
 
 void pbrick_light_right_blink()
 {
-    uint8_t count = 1;
-#ifdef PBRICK_LIGHT_LEFT_REAR
-        count++;
-#endif
     uint32_t lights[] = {
         PBRICK_LIGHT_LEFT_FRONT
 #ifdef PBRICK_LIGHT_LEFT_REAR
         ,PBRICK_LIGHT_LEFT_REAR
 #endif
     };
+
+    uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
     return pbrick_light_blink(lights, count);
 }
 
