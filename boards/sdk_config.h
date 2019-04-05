@@ -55,7 +55,7 @@
 
 // <i> Configure the number of virtual pages to use and their size.
 //==========================================================
-// <o> FDS_VIRTUAL_PAGES - Number of virtual flash pages to use. 
+// <o> FDS_VIRTUAL_PAGES - Number of virtual flash pages to use.
 // <i> One of the virtual pages is reserved by the system for garbage collection.
 // <i> Therefore, the minimum is two virtual pages: one page to store data and one page to be used by the system for garbage collection.
 // <i> The total amount of flash memory that is used by FDS amounts to @ref FDS_VIRTUAL_PAGES * @ref FDS_VIRTUAL_PAGE_SIZE * 4 bytes.
@@ -65,19 +65,19 @@
 #endif
 
 // <o> FDS_VIRTUAL_PAGE_SIZE  - The size of a virtual flash page.
- 
+
 
 // <i> Expressed in number of 4-byte words.
 // <i> By default, a virtual page is the same size as a physical page.
 // <i> The size of a virtual page must be a multiple of the size of a physical page.
-// <1024=> 1024 
-// <2048=> 2048 
+// <1024=> 1024
+// <2048=> 2048
 
 #ifndef FDS_VIRTUAL_PAGE_SIZE
 #define FDS_VIRTUAL_PAGE_SIZE 1024
 #endif
 
-// <o> FDS_VIRTUAL_PAGES_RESERVED - The number of virtual flash pages that are used by other modules. 
+// <o> FDS_VIRTUAL_PAGES_RESERVED - The number of virtual flash pages that are used by other modules.
 // <i> FDS module stores its data in the last pages of the flash memory.
 // <i> By setting this value, you can move flash end address used by the FDS.
 // <i> As a result the reserved space can be used by other modules.
@@ -86,7 +86,7 @@
 #define FDS_VIRTUAL_PAGES_RESERVED 0
 #endif
 
-// </h> 
+// </h>
 //==========================================================
 
 // <h> Backend - Backend configuration
@@ -94,31 +94,31 @@
 // <i> Configure which nrf_fstorage backend is used by FDS to write to flash.
 //==========================================================
 // <o> FDS_BACKEND  - FDS flash backend.
- 
+
 
 // <i> NRF_FSTORAGE_SD uses the nrf_fstorage_sd backend implementation using the SoftDevice API. Use this if you have a SoftDevice present.
 // <i> NRF_FSTORAGE_NVMC uses the nrf_fstorage_nvmc implementation. Use this setting if you don't use the SoftDevice.
-// <1=> NRF_FSTORAGE_NVMC 
-// <2=> NRF_FSTORAGE_SD 
+// <1=> NRF_FSTORAGE_NVMC
+// <2=> NRF_FSTORAGE_SD
 
 #ifndef FDS_BACKEND
 #define FDS_BACKEND 2
 #endif
 
-// </h> 
+// </h>
 //==========================================================
 
 // <h> Queue - Queue settings
 
 //==========================================================
-// <o> FDS_OP_QUEUE_SIZE - Size of the internal queue. 
+// <o> FDS_OP_QUEUE_SIZE - Size of the internal queue.
 // <i> Increase this value if you frequently get synchronous FDS_ERR_NO_SPACE_IN_QUEUES errors.
 
 #ifndef FDS_OP_QUEUE_SIZE
 #define FDS_OP_QUEUE_SIZE 4
 #endif
 
-// </h> 
+// </h>
 //==========================================================
 
 // <h> CRC - CRC functionality
@@ -134,12 +134,12 @@
 #define FDS_CRC_CHECK_ON_READ 0
 #endif
 // <o> FDS_CRC_CHECK_ON_WRITE  - Perform a CRC check on newly written records.
- 
+
 
 // <i> Perform a CRC check on newly written records.
 // <i> This setting can be used to make sure that the record data was not altered while being written to flash.
-// <1=> Enabled 
-// <0=> Disabled 
+// <1=> Enabled
+// <0=> Disabled
 
 #ifndef FDS_CRC_CHECK_ON_WRITE
 #define FDS_CRC_CHECK_ON_WRITE 0
@@ -7500,6 +7500,11 @@
 #ifndef NRF_LOG_BACKEND_RTT_ENABLED
 #define NRF_LOG_BACKEND_RTT_ENABLED 1
 #endif
+
+#ifndef NRF_LOG_BACKEND_SERIAL_USES_RTT
+#define NRF_LOG_BACKEND_SERIAL_USES_RTT 1
+#endif
+
 // <o> NRF_LOG_BACKEND_RTT_TEMP_BUFFER_SIZE - Size of buffer for partially processed strings.
 // <i> Size of the buffer is a trade-off between RAM usage and processing.
 // <i> if buffer is smaller then strings will often be fragmented.
@@ -7531,12 +7536,9 @@
 // <e> NRF_LOG_BACKEND_UART_ENABLED - nrf_log_backend_uart - Log UART backend
 //==========================================================
 #ifndef NRF_LOG_BACKEND_UART_ENABLED
-#define NRF_LOG_BACKEND_UART_ENABLED 1
+#define NRF_LOG_BACKEND_UART_ENABLED 0
 #endif
-// <o> NRF_LOG_BACKEND_UART_TX_PIN - UART TX pin
-#ifndef NRF_LOG_BACKEND_UART_TX_PIN
-#define NRF_LOG_BACKEND_UART_TX_PIN 6
-#endif
+
 
 // <o> NRF_LOG_BACKEND_UART_BAUDRATE  - Default Baudrate
 
@@ -7650,6 +7652,7 @@
 #ifndef NRF_LOG_DEFAULT_LEVEL
 #define NRF_LOG_DEFAULT_LEVEL 3
 #endif
+
 
 // <q> NRF_LOG_DEFERRED  - Enable deffered logger.
 

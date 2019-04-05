@@ -2,9 +2,12 @@
 #include "pbrick_board.h"
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
+#include "nrf_log.h"
+#include "nrf_log_ctrl.h"
 
 void pbrick_light_init()
 {
+    NRF_LOG_INFO("Initializing lighting");
     bsp_board_init(BSP_INIT_LEDS);
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_FRONT);
     nrf_gpio_cfg_output(PBRICK_LIGHT_RIGHT_FRONT);
@@ -12,34 +15,43 @@ void pbrick_light_init()
 
 #ifdef PBRICK_LIGHT_LEFT_REAR
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_REAR);
+    NRF_LOG_INFO("PBRICK_LIGHT_LEFT_REAR supported");
 #endif
 #ifdef PBRICK_LIGHT_RIGHT_REAR
     nrf_gpio_cfg_output(PBRICK_LIGHT_RIGHT_REAR);
+    NRF_LOG_INFO("PBRICK_LIGHT_RIGHT_REAR supported");
 #endif
 #ifdef PBRICK_LIGHT_LOW
     nrf_gpio_cfg_output(PBRICK_LIGHT_LOW);
+    NRF_LOG_INFO("PBRICK_LIGHT_LOW supported");
 #endif
 
 // Accessories are defined per board
 #ifdef PBRICK_LIGHT_ACC0
     nrf_gpio_cfg_output(PBRICK_LIGHT_ACC0);
+    nrf_gpio_cfg_output(PBRICK_LIGHT_ACC0);
+    NRF_LOG_INFO("PBRICK_LIGHT_LOW supported");
 #endif
 
 #ifdef PBRICK_LIGHT_ACC1
     nrf_gpio_cfg_output(PBRICK_LIGHT_ACC1);
+    NRF_LOG_INFO("PBRICK_LIGHT_ACC1 supported");
 #endif
 
 #ifdef PBRICK_LIGHT_ACC2
     nrf_gpio_cfg_output(PBRICK_LIGHT_ACC2);
+    NRF_LOG_INFO("PBRICK_LIGHT_ACC2 supported");
 #endif
 
 #ifdef PBRICK_AUTO_LIGHTS_ON_AT_BOOT
+    NRF_LOG_INFO("PBRICK_AUTO_LIGHTS_ON_AT_BOOT set. Enabling all available lighting.");
     pbrick_light_set(0xFF, 0xFF);
 #endif
 }
 
 void pbrick_light_set(uint8_t light, uint8_t option)
 {
+    NRF_LOG_DEBUG("Set Lighting: Mode: %X Light: %X", light, option);
     if (light == 0x00 && option == 0x00) {
         pbrick_light_off();
     } else if (light == 0xFF && option == 0xFF) {
@@ -74,6 +86,7 @@ void pbrick_light_set(uint8_t light, uint8_t option)
                 pbrick_light_blink_ctl(option);
                 break;
             default:
+                NRF_LOG_WARNING("Unrecognized lighting level: %X Light: %X", light, option);
                 break;
         }
     }

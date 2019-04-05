@@ -16,7 +16,6 @@ extern "C" {
 #define PBRICK_LED1                 LED_1
 #define PBRICK_LED2                 LED_2
 #define PBRICK_LED3                 LED_3
-//#define PBRICK_LED4                 LED_4
 
 // Motor control
 #define PBRICK_PWM0_PWM             NRF_GPIO_PIN_MAP(0, 4)

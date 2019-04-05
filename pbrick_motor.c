@@ -1,6 +1,7 @@
 #include "app_pwm.h"
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
+#include "nrf_log.h"
 #include "pbrick_motor.h"
 #include "pbrick_board.h"
 
@@ -33,12 +34,14 @@ void pbrick_motor0_init()
     err_code = app_pwm_init(&PWM0, &pwm1_cfg,pwm_ready_callback);
     APP_ERROR_CHECK(err_code);
     app_pwm_enable(&PWM0);
+    NRF_LOG_INFO("Motor 0 initialized");
 }
 
 void pbrick_motor0_set(uint8_t direction, uint8_t pwm)
 {
     int speed = (int)pwm;
     if (speed > 100) {
+        NRF_LOG_INFO("Adjusting speed %x in excess of 100 to 100", speed)
         speed = 100;
     }
 
@@ -48,6 +51,8 @@ void pbrick_motor0_set(uint8_t direction, uint8_t pwm)
     } else if (direction == 0x01) {
         pbrick_motor0_reverse();
     }
+
+    NRF_LOG_DEBUG("Set Motor0: Direction: %X Speed: %X", direction, pwm);
 }
 
 void pbrick_motor0_forward()
