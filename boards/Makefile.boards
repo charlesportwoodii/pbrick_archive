@@ -1,5 +1,7 @@
 TARGETS          := nrf52840_xxaa
 
+GIT_VERSION = $(shell git describe --dirty --always --tags)
+
 SDK_ROOT := $(NORDIC_SDK_PATH)
 PROJ_DIR := $(CURDIR)/../../..
 BOARD_DIR := $(CURDIR)
@@ -237,7 +239,11 @@ INC_FOLDERS += \
 LIB_FILES += \
 
 # Optimization flags
+ifeq ($(PBRICK_DEBUG), 1)
+OPT = -O0 -ggdb
+else
 OPT = -O3 -g3
+endif
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
 
@@ -307,7 +313,11 @@ LIB_FILES += -lc -lnosys -lm
 
 # Default target - first one defined
 default: nrf52840_xxaa
-	@cp $(PROJ_DIR)/_build_$(BOARD_NAME)/nrf52840_xxaa.hex $(PROJ_DIR)/pbrick_$(BOARD_NAME)_s140.hex
+ifeq ($(PBRICK_DEBUG), 1)
+	@cp $(PROJ_DIR)/_build_$(BOARD_NAME)/nrf52840_xxaa.hex $(PROJ_DIR)/pbrick_$(BOARD_NAME)-$(GIT_VERSION)_debug_s140.hex
+else
+	@cp $(PROJ_DIR)/_build_$(BOARD_NAME)/nrf52840_xxaa.hex $(PROJ_DIR)/pbrick_$(BOARD_NAME)_$(GIT_VERSION)_s140.hex
+endif
 
 # Print all targets that can be built
 help:
