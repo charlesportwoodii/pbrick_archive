@@ -1,5 +1,5 @@
-#ifndef PBRICK_PCA10059_H
-#define PBRICK_PCA10059_H
+#ifndef PBRICK_SPARKFUN_PRO_MINI
+#define PBRICK_SPARKFUN_PRO_MINI
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,4 +67,4 @@ extern "C" {
 }
 #endif
 
-#endif // PBRICK_PCA10059_H
+#endif // PBRICK_SPARKFUN_PRO_MINI

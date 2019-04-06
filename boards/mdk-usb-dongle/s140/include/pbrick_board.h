@@ -1,5 +1,5 @@
-#ifndef PBRICK_PCA10059_H
-#define PBRICK_PCA10059_H
+#ifndef PBRICK_MDK_USB_DONGLE_H
+#define PBRICK_MDK_USB_DONGLE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,4 +70,4 @@ extern "C" {
 }
 #endif
 
-#endif // PBRICK_PCA10059_H
+#endif // PBRICK_MDK_USB_DONGLE_H
