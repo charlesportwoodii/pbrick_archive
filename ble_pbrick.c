@@ -34,6 +34,14 @@ static void on_disconnect(ble_pbrick_t * p_pbrick, ble_evt_t const * p_ble_evt)
 {
     UNUSED_PARAMETER(p_ble_evt);
     p_pbrick->conn_handle = BLE_CONN_HANDLE_INVALID;
+
+    // On disconnect blink the lights
+    pbrick_light_set(0x11, 0x01);
+
+#ifdef PBRICK_MOTOR0_DISCONNECT_SHUTDOWN
+    NRF_LOG_WARNING("Stopping motor on bluetooth disconnection.");
+    pbrick_motor0_stop();
+#endif
 }
 
 /**@brief Function for handling the Write event.
@@ -69,6 +77,12 @@ static void gpio_init(
 
     // Initialize lighting control
     pbrick_light_init();
+}
+
+void gpio_shutdown()
+{
+    pbrick_motor0_set(0x00, 0x00);
+    pbrick_light_set(0x00, 0x00);
 }
 
 uint32_t ble_pbrick_init(

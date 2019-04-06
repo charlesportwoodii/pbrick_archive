@@ -29,6 +29,13 @@ void pbrick_motor0_init();
  */
 void pbrick_motor0_set(uint8_t direction, uint8_t pwm);
 
+
+/**@brief Performs an immediate stop by shutting down input to PWM0 and PWM1
+ *
+ * @return void
+ */
+void pbrick_motor0_stop();
+
 /**@brief sets the motor in forward
  *
  * @return void

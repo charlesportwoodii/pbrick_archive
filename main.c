@@ -840,8 +840,6 @@ int main(void)
     conn_params_init();
     peer_manager_init();
 
-    NRF_LOG_INFO("Buttonless DFU Application started.");
-
     // Start execution.
     application_timers_start();
     advertising_start(erase_bonds);
