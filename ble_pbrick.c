@@ -93,7 +93,9 @@ static void gpio_init(
 void gpio_shutdown()
 {
     pbrick_motor0_set(0x00, 0x00);
+#ifndef PBRICK_CUSTOM_LIGHT
     pbrick_light_set(0x00, 0x00);
+#endif
 }
 
 uint32_t ble_pbrick_init(
@@ -241,7 +243,7 @@ uint32_t light_char_add(
     attr_char_value.p_attr_md = &attr_md;
     attr_char_value.init_len  = sizeof(uint8_t[2]);
     attr_char_value.init_offs = 0;
-    attr_char_value.max_len   = sizeof(uint8_t[2]);
+    attr_char_value.max_len   = sizeof(uint8_t[8]);
 
     err_code = sd_ble_gatts_characteristic_add(p_pbrick->service_handle, &char_md,
                                                &attr_char_value,
