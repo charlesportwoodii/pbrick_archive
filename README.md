@@ -1,5 +1,7 @@
 # PBrick
 
+![Travis (.com)](https://img.shields.io/travis/com/charlesportwoodii/pbrick.svg?style=for-the-badge)
+
 A firmware package for Nordic nRF52 chipset made for powering legos, models, and other gadgets with motor, lighting, and other controls over Bluetooth low energy.
 
 ## Documentation
