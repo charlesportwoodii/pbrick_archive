@@ -73,7 +73,7 @@ void pbrick_motor0_stop()
     nrf_gpio_pin_clear(PBRICK_PWM0_P2);
 
     // Triggers an undefined behavior with the motor direction so the motor doesn't shift
-    pbrick_motor0_set(0x0, 0x00);
+    pbrick_motor0_set(0xFF, 0x00);
     app_pwm_enable(&PWM0);
 }
 
