@@ -51,7 +51,7 @@ void pbrick_motor0_set(uint8_t direction, uint8_t pwm)
     }
 
     m0s.direction = direction;
-    m0s.speed = (uint8_t)speed;
+    m0s.speed = pwm;
 
     while (app_pwm_channel_duty_set(&PWM0, 0, abs(m0s.speed)) == NRF_ERROR_BUSY);
     if (m0s.direction == 0x00) {
@@ -59,7 +59,7 @@ void pbrick_motor0_set(uint8_t direction, uint8_t pwm)
     } else if (m0s.direction == 0x01) {
         pbrick_motor0_reverse();
     } else {
-        NRF_LOG_WARNING("%X motor direction is not defined", direction);
+        NRF_LOG_WARNING("%X motor direction is not defined", m0s.direction);
     }
 
     NRF_LOG_DEBUG("Set Motor0: Direction: %X Speed: %X", m0s.direction, m0s.speed);
@@ -72,7 +72,7 @@ void pbrick_motor0_stop()
     nrf_gpio_pin_clear(PBRICK_PWM0_P2);
 
     // Triggers an undefined behavior with the motor direction so the motor doesn't shift
-    pbrick_motor0_set(0x04, 0x00);
+    pbrick_motor0_set(0x0, 0x00);
 }
 
 void pbrick_motor0_forward()
