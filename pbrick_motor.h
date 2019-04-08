@@ -6,10 +6,10 @@ extern "C" {
 #endif
 
 #include "pbrick_board.h"
-#include "bsp.h"
-#include "nrf_delay.h"
-#include "boards.h"
-#include "nrf_gpio.h"
+
+#if !defined(PBRICK_PWM0_P1) || !defined(PBRICK_PWM0_P1) || !defined(PBRICK_PWM0_PWM)
+#error "PBRICK_PWM0_P1, PBRICK_PWM0_P2, or PBRICK_PWM0_PWM is not defined. Check your board definition."
+#endif
 
 // PWM ready flag
 static volatile bool ready_flag;

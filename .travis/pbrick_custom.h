@@ -5,6 +5,8 @@
 extern "C" {
 #endif
 
+#warning "pbrick_custom.h must be defined."
+
 #ifdef __cplusplus
 }
 #endif
