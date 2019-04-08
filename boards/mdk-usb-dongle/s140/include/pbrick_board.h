@@ -14,7 +14,7 @@ extern "C" {
 
 // Allow overwriting and importing of custom behavior via `pbrick_custom.h` header.
 #ifdef PBRICK_CUSTOM
-#include "pbrick_custom.h";
+#include "pbrick_custom.h"
 #endif
 
 // On board LEDS

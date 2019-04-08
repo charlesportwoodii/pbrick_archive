@@ -97,6 +97,10 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_svci.c \
   $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_svci_handler.c \
 
+ifeq ($(PBRICK_LIGHT_CUSTOM), 1)
+SRC_FILES += $(PROJ_DIR)/pbrick_light_custom.c
+endif
+
 # Include folders common to all targets
 INC_FOLDERS += \
   $(PROJ_DIR) \
@@ -234,7 +238,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/bootloader/dfu \
   $(SDK_ROOT)/components/libraries/bootloader/ble_dfu \
   $(BOARD_DIR)/include \
-
+  
 # Libraries common to all targets
 LIB_FILES += \
 
@@ -259,7 +263,10 @@ CFLAGS += -DSOFTDEVICE_PRESENT
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -DUSE_APP_CONFIG
 ifeq ($(PBRICK_CUSTOM), 1)
-CFLAGS += -DPBRICK_CUSTOM
+CFLAGS += -DPBRICK_CUSTOM=1
+endif
+ifeq ($(PBRICK_LIGHT_CUSTOM), 1)
+CFLAGS += -DPBRICK_LIGHT_CUSTOM=1
 endif
 ifeq ($(PBRICK_DEBUG),1)
 CFLAGS += -DPBRICK_DEBUG
@@ -290,7 +297,10 @@ ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DSWI_DISABLE0
 ASMFLAGS += -DUSE_APP_CONFIG
 ifeq ($(PBRICK_CUSTOM), 1)
-ASMFLAGS += -DPBRICK_CUSTOM
+ASMFLAGS += -DPBRICK_CUSTOM=1
+endif
+ifeq ($(PBRICK_LIGHT_CUSTOM), 1)
+ASMFLAGS += -DPBRICK_LIGHT_CUSTOM=1
 endif
 ifeq ($(PBRICK_DEBUG),1)
 ASMFLAGS += -DPBRICK_DEBUG

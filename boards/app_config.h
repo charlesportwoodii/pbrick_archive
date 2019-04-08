@@ -21,14 +21,6 @@ extern "C" {
 
 #endif // PBRICK_DEBUG
 
-#ifdef PBRICK_CUSTOM
-
-#ifndef PBRICK_CUSTOM_LIGHT
-#define PBRICK_CUSTOM_LIGHT 1
-#endif
-
-#endif //PBRICK_CUSTOM
-
 #ifdef __cplusplus
 }
 #endif

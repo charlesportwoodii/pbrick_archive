@@ -1,9 +1,4 @@
-#ifdef PBRICK_CUSTOM_LIGHT
-#include "pbrick_light_custom.h";
-#else
 #include "pbrick_light.h"
-#endif
-
 #include "pbrick_board.h"
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
@@ -12,9 +7,6 @@
 
 void pbrick_light_init()
 {
-#ifdef PBRICK_CUSTOM_LIGHT
-    pbrick_light_custom_init();
-#else
     NRF_LOG_INFO("Initializing lighting");
     bsp_board_init(BSP_INIT_LEDS);
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_FRONT);
@@ -54,7 +46,6 @@ void pbrick_light_init()
 #ifdef PBRICK_AUTO_LIGHTS_ON_AT_BOOT
     NRF_LOG_INFO("PBRICK_AUTO_LIGHTS_ON_AT_BOOT set. Enabling all available lighting.");
     pbrick_light_set(0xFF, 0xFF);
-#endif
 #endif
 }
 
@@ -101,7 +92,6 @@ void pbrick_light_set(uint8_t light, uint8_t option)
     }
 }
 
-#ifndef PBRICK_CUSTOM_LIGHT
 void pbrick_light_off()
 {
     uint32_t lights[] = {
@@ -307,5 +297,4 @@ void pbrick_light_do_option(uint32_t lights[], uint8_t count, uint8_t option)
         default:
             break;
     }
-#endif
 }

@@ -1,4 +1,3 @@
-#ifdef PBRICK_CUSTOM_LIGHT
 #ifndef PBRICK_LIGHT_CUSTOM_H
 #define PBRICK_LIGHT_CUSTOM_H
 
@@ -6,7 +5,7 @@
 extern "C" {
 #endif
 
-#include "pbrick_board.h";
+#include "pbrick_board.h"
 
 /**@brief Initialize custom lighting profile
  *
@@ -19,11 +18,10 @@ void pbrick_light_custom_init();
  * @param[in] uint8_t[]     option      The option to set
  * @return void
  */
-void pbrick_light_custom_set(uint8_t option[]);
+void pbrick_light_custom_set(const uint8_t option[]);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif // PBRICK_LIGHT_CUSTOM_H
-#endif // PBRICK_CUSTOM_LIGHT
