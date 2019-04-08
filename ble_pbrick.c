@@ -1,6 +1,11 @@
 #include "ble_pbrick.h"
 #include "pbrick_motor.h"
+#ifdef PBRICK_CUSTOM_LIGHT
+#include "pbrick_light_custom.h";
+#else
 #include "pbrick_light.h"
+#endif
+
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -36,7 +41,9 @@ static void on_disconnect(ble_pbrick_t * p_pbrick, ble_evt_t const * p_ble_evt)
     p_pbrick->conn_handle = BLE_CONN_HANDLE_INVALID;
 
     // On disconnect blink the lights
+#ifndef PBRICK_CUSTOM_LIGHT
     pbrick_light_set(0x11, 0x01);
+#endif
 
 #ifdef PBRICK_MOTOR0_DISCONNECT_SHUTDOWN
     NRF_LOG_WARNING("Stopping motor on bluetooth disconnection.");
@@ -56,7 +63,11 @@ static void on_write(ble_pbrick_t * p_pbrick, ble_evt_t const * p_ble_evt)
     if (p_evt_write->handle == p_pbrick->motor_value_handles.value_handle) {
         pbrick_motor0_set(p_evt_write->data[0], p_evt_write->data[1]);
     } else if (p_evt_write->handle == p_pbrick->lights_value_handles.value_handle) {
+#ifdef PBRICK_CUSTOM_LIGHT
+        pbrick_light_custom_set(p_evt_write->data);
+#else
         pbrick_light_set(p_evt_write->data[0], p_evt_write->data[1]);
+#endif
     }
 }
 
