@@ -14,6 +14,16 @@ extern "C" {
 // PWM ready flag
 static volatile bool ready_flag;
 
+// Motor state
+struct pbrick_motor_state
+{
+    uint8_t     direction;
+    uint8_t     speed;
+};
+
+// Motor 0 state
+typedef struct pbrick_motor_state pbrick_motor0_state;
+
 /**@brief Initializes motor0
  *
  * @return      void
