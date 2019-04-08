@@ -243,7 +243,11 @@ uint32_t light_char_add(
     attr_char_value.p_attr_md = &attr_md;
     attr_char_value.init_len  = sizeof(uint8_t[2]);
     attr_char_value.init_offs = 0;
-    attr_char_value.max_len   = sizeof(uint8_t[8]);
+#ifndef PBRICK_CUSTOM_LIGHT
+    attr_char_value.max_len   = sizeof(uint8_t[2]);
+#else
+    attr_car_value.max_len    = sizeof(uint8_t[8]);
+#endif
 
     err_code = sd_ble_gatts_characteristic_add(p_pbrick->service_handle, &char_md,
                                                &attr_char_value,
