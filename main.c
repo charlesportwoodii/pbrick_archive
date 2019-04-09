@@ -79,6 +79,10 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "nrf_dfu_ble_svci_bond_sharing.h"
+#include "nrf_svci_async_function.h"
+#include "nrf_svci_async_handler.h"
+
 #include "ble_pbrick.h"
 
 #define DEVICE_NAME                     "PBRICK"                                /**< Name of device. Will be included in the advertising data. */
@@ -116,16 +120,13 @@ NRF_BLE_QWR_DEF(m_qwr);                                                         
 BLE_ADVERTISING_DEF(m_advertising);                                             /**< Advertising module instance. */
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        /**< Handle of the current connection. */
+static void advertising_start(bool erase_bonds);
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
 static ble_uuid_t m_adv_uuids[] =                                               /**< Universally unique service identifiers. */
 {
-    {PBRICK_SERIVCE_UUID, BLE_UUID_TYPE_VENDOR_BEGIN},
-    {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
+    {PBRICK_SERIVCE_UUID, BLE_UUID_TYPE_VENDOR_BEGIN}
 };
-
-
-static void advertising_start(bool erase_bonds);
 
 
 /**@brief Handler for shutdown preparation.
@@ -138,33 +139,14 @@ static void advertising_start(bool erase_bonds);
  *
  * @retval  True if shutdown is allowed by this power manager handler, otherwise false.
  */
+
 static bool app_shutdown_handler(nrf_pwr_mgmt_evt_t event)
 {
     switch (event)
     {
         case NRF_PWR_MGMT_EVT_PREPARE_DFU:
             NRF_LOG_INFO("Power management wants to reset to DFU mode.");
-            // YOUR_JOB: Get ready to reset into DFU mode
-            //
-            // If you aren't finished with any ongoing tasks, return "false" to
-            // signal to the system that reset is impossible at this stage.
-            //
-            // Here is an example using a variable to delay resetting the device.
-            //
-            // if (!m_ready_for_reset)
-            // {
-            //      return false;
-            // }
-            // else
-            //{
-            //
-            //    // Device ready to enter
-            //    uint32_t err_code;
-            //    err_code = sd_softdevice_disable();
-            //    APP_ERROR_CHECK(err_code);
-            //    err_code = app_timer_stop_all();
-            //    APP_ERROR_CHECK(err_code);
-            //}
+            gpio_shutdown();
             break;
 
         default:
