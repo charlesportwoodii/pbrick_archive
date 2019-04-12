@@ -95,6 +95,9 @@ SRC_FILES += \
   $(SDK_ROOT)/components/ble/ble_services/ble_dfu/ble_dfu_unbonded.c \
   $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_svci.c \
   $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_svci_handler.c \
+  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_settings.c \
+  $(SDK_ROOT)/components/libraries/bootloader/dfu/nrf_dfu_settings_svci.c \
+  $(SDK_ROOT)/components/libraries/crc32/crc32.c \
 
 ifeq ($(PBRICK_LIGHT_CUSTOM), 1)
 SRC_FILES += $(PROJ_DIR)/pbrick_light_custom.c
@@ -251,13 +254,16 @@ endif
 
 # C flags common to all targets
 CFLAGS += $(OPT)
+CFLAGS += -DBLE_STACK_SUPPORT_REQD
 CFLAGS += -DFLOAT_ABI_HARD
 CFLAGS += -DNRF52840_XXAA
 CFLAGS += -DNRF_DFU_SVCI_ENABLED
+CFLAGS += -DNRF_DFU_SETTINGS_VERSION=1
 CFLAGS += -DNRF_DFU_TRANSPORT_BLE=1
 CFLAGS += -DNRF_SD_BLE_API_VERSION=6
 CFLAGS += -DS140
 CFLAGS += -DSOFTDEVICE_PRESENT
+CFLAGS += -DSVC_INTERFACE_CALL_AS_NORMAL_FUNCTION
 CFLAGS += -DSWI_DISABLE0
 CFLAGS += -DUSE_APP_CONFIG
 ifeq ($(PBRICK_CUSTOM), 1)
@@ -268,6 +274,8 @@ CFLAGS += -DPBRICK_LIGHT_CUSTOM=1
 endif
 ifeq ($(PBRICK_DEBUG),1)
 CFLAGS += -DPBRICK_DEBUG
+CFLAGS += -DDEBUG_NRF
+CFLAGS += -DNRF_DFU_DEBUG_VERSION
 endif
 CFLAGS += -mcpu=cortex-m4
 CFLAGS += -mthumb -mabi=aapcs
@@ -285,12 +293,16 @@ ASMFLAGS += -g3
 ASMFLAGS += -mcpu=cortex-m4
 ASMFLAGS += -mthumb -mabi=aapcs
 ASMFLAGS += -mfloat-abi=hard -mfpu=fpv4-sp-d16
+ASMFLAGS += -DBLE_STACK_SUPPORT_REQD
 ASMFLAGS += -DFLOAT_ABI_HARD
 ASMFLAGS += -DNRF52840_XXAA
 ASMFLAGS += -DNRF_DFU_SVCI_ENABLED
 ASMFLAGS += -DNRF_DFU_TRANSPORT_BLE=1
 ASMFLAGS += -DNRF_SD_BLE_API_VERSION=6
 ASMFLAGS += -DS140
+ASMFLAGS += -DNRF_DFU_SETTINGS_VERSION=1
+ASMFLAGS += -DSVC_INTERFACE_CALL_AS_NORMAL_FUNCTION
+ASMFLAGS += -DNRF_DFU_SVCI_ENABLED
 ASMFLAGS += -DSOFTDEVICE_PRESENT
 ASMFLAGS += -DSWI_DISABLE0
 ASMFLAGS += -DUSE_APP_CONFIG
@@ -302,6 +314,7 @@ ASMFLAGS += -DPBRICK_LIGHT_CUSTOM=1
 endif
 ifeq ($(PBRICK_DEBUG),1)
 ASMFLAGS += -DPBRICK_DEBUG
+ASMFLAGS += -DNRF_DFU_DEBUG_VERSION
 endif
 
 # Linker flags
