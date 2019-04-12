@@ -246,9 +246,8 @@ ifeq ($(PBRICK_DEBUG), 1)
 OPT = -O0 -ggdb
 else
 OPT = -O3 -g3
+OPT += -flto
 endif
-# Uncomment the line below to enable link time optimization
-#OPT += -flto
 
 # C flags common to all targets
 CFLAGS += $(OPT)
