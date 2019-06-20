@@ -7,6 +7,10 @@ extern "C" {
 
 #include "pbrick_board.h"
 
+#if !defined(PBRICK_LIGHT_LEFT_FRONT) || !defined(PBRICK_LIGHT_RIGHT_FRONT) || !defined(PBRICK_LIGHT_HIGH)
+#error "PBRICK_LIGHT_LEFT_FRONT, PBRICK_LIGHT_RIGHT_FRONT, or PBRICK_LIGHT_HIGH is not defined. Check your board definition."
+#endif
+
 /**@brief Initializes lighting
  *
  * @return      void

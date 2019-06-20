@@ -1,0 +1,39 @@
+dist: xenial
+language: c
+
+cache:
+  directories:
+    - $HOME/gcc-arm-none-eabi-8-2018-q4-major
+    - $HOME/nrf_sdk/15.3.0
+
+env:
+  global:
+    - GNU_INSTALL_ROOT="$HOME/gcc-arm-none-eabi-8-2018-q4-major/bin/"
+    - NORDIC_SDK_PATH="$HOME/nrf_sdk/15.3.0"
+    - PATH="$PATH:$HOME/gcc-arm-none-eabi-8-2018-q4-major/bin"
+
+  matrix:
+    - BOARD=sparkfun-pro-mini # Release
+    - BOARD=sparkfun-pro-mini PBRICK_DEBUG=1 # Debug
+    - BOARD=sparkfun-pro-mini PBRICK_DEBUG=1 PBRICK_CUSTOM=1 PBRICK_LIGHT_CUSTOM=1 # Debug with custom functionality
+
+    - BOARD=mdk-usb-dongle # Release
+    - BOARD=mdk-usb-dongle PBRICK_DEBUG=1 # Debug
+    - BOARD=mdk-usb-dongle PBRICK_DEBUG=1 PBRICK_CUSTOM=1 PBRICK_LIGHT_CUSTOM=1 # Debug with custom functionality
+
+    - BOARD=pca10059 # Release
+    - BOARD=pca10059 PBRICK_DEBUG=1 # Debug
+    - BOARD=pca10059 PBRICK_DEBUG=1 PBRICK_CUSTOM=1 PBRICK_LIGHT_CUSTOM=1 # Debug with custom functionality
+
+before_install:
+  - chmod +x $TRAVIS_BUILD_DIR/.travis/before_install.sh
+
+install:
+  - $TRAVIS_BUILD_DIR/.travis/before_install.sh
+  # Verify the arm-none-eabi-gcc binary is working correctly
+  - arm-none-eabi-gcc --version
+  - if env | grep -q ^PBRICK_LIGHT_CUSTOM=; then cp $TRAVIS_BUILD_DIR/.travis/pbrick_light_custom.c $TRAVIS_BUILD_DIR; fi
+  - if env | grep -q ^PBRICK_CUSTOM=; then cp $TRAVIS_BUILD_DIR/.travis/pbrick_custom.h $TRAVIS_BUILD_DIR; fi
+
+script:
+  - make

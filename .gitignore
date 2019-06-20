@@ -1,3 +1,5 @@
 _build
 _build*
 /*.hex
+pbrick_light_custom.c
+pbrick_custom.h

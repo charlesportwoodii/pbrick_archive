@@ -17,7 +17,7 @@ $(BOARD_LIST):
 
 flash:
 ifneq ($(filter $(BOARD),$(BOARD_LIST)),)
-	$(MAKE) bootload -C boards/$(BOARD)/s140
+	$(MAKE) flash -C boards/$(BOARD)/s140
 else
 	$(error Run `make` with a board specified: ($(BOARD_LIST)))
 endif

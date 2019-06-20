@@ -1,5 +1,5 @@
-#ifndef PBRICK_PCA10059_H
-#define PBRICK_PCA10059_H
+#ifndef PBRICK_SPARKFUN_PRO_MINI
+#define PBRICK_SPARKFUN_PRO_MINI
 
 #ifdef __cplusplus
 extern "C" {
@@ -12,41 +12,59 @@ extern "C" {
 #include "boards.h"
 #include "nrf_gpio.h"
 
+// Allow overwriting and importing of custom behavior via `pbrick_custom.h` header.
+#ifdef PBRICK_CUSTOM
+#include "pbrick_custom.h"
+#endif
+
 // On board LEDS
+#ifndef PBRICK_LED1
 #define PBRICK_LED1                 LED_1
+#endif
+
+#ifndef PBRICK_LED2
 #define PBRICK_LED2                 LED_2
-//#define PBRICK_LED3                 LED_3
-//#define PBRICK_LED4                 LED_4
+#endif
 
 // Motor control
+#ifndef PBRICK_PWM0_PWM
 #define PBRICK_PWM0_PWM             NRF_GPIO_PIN_MAP(0, 2)
+#endif
+
+#ifndef PBRICK_PWM0_P1
 #define PBRICK_PWM0_P1              NRF_GPIO_PIN_MAP(0, 3)
+#endif
+
+#ifndef PBRICK_PWM0_P2
 #define PBRICK_PWM0_P2              NRF_GPIO_PIN_MAP(0, 31)
+#endif
 
 // LED definitions
 
 // Highbeams
+#ifndef PBRICK_LIGHT_HIGH
 #define PBRICK_LIGHT_HIGH           NRF_GPIO_PIN_MAP(0, 21)
+#endif
 
 // Main headlights
+#ifndef PBRICK_LIGHT_LEFT_FRONT
 #define PBRICK_LIGHT_LEFT_FRONT     NRF_GPIO_PIN_MAP(0, 22)
+#endif
+
+#ifndef PBRICK_LIGHT_RIGHT_FRONT
 #define PBRICK_LIGHT_RIGHT_FRONT    NRF_GPIO_PIN_MAP(0, 23)
+#endif
 
-// Rear lights
-//#define PBRICK_LIGHT_LEFT_REAR      NRF_GPIO_PIN_MAP(0, 23)
-//#define PBRICK_LIGHT_RIGHT_REAR     NRF_GPIO_PIN_MAP(0, 2)
-
-// Daytime running lights
-//#define PBRICK_LIGHT_LOW            NRF_GPIO_PIN_MAP(0, 7)
-
-// Accessory lighting
-//#define PBRICK_LIGHT_ACC0           NRF_GPIO_PIN_MAP(0, 8)
-//#define PBRICK_LIGHT_ACC1           NRF_GPIO_PIN_MAP(1, 9)
-//#define PBRICK_LIGHT_ACC2           NRF_GPIO_PIN_MAP(1, 10)
-
+#ifndef PBRICK_AUTO_LIGHTS_ON_AT_BOOT
 #define PBRICK_AUTO_LIGHTS_ON_AT_BOOT 1
+#endif
+
+#ifndef PBRICK_MOTOR0_DISCONNECT_SHUTDOWN
+#define PBRICK_MOTOR0_DISCONNECT_SHUTDOWN 1
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif // PBRICK_PCA10059_H
+#endif // PBRICK_SPARKFUN_PRO_MINI

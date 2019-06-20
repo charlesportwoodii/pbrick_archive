@@ -99,6 +99,10 @@ uint32_t light_char_add(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pbr
  */
 void ble_pbrick_on_ble_evt(ble_evt_t const * p_ble_evt, void * p_context);
 
+/**@brief Shutdowns GPIO pins to prevent runaway behavior.
+ */
+void gpio_shutdown();
+
 #ifdef __cplusplus
 }
 #endif
