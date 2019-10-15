@@ -24,6 +24,7 @@ struct s_pbrick_motor_state
 typedef struct s_pbrick_motors
 {
     uint8_t elements;
+    uint8_t size;
     struct s_pbrick_motor_state motors[4];
 } pbrick_motors;
 

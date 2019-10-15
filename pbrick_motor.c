@@ -132,11 +132,13 @@ static void three_wire_setup()
 void pbrick_motor_init()
 {
     // Create mock sentinel values.
-    for (int i = 0; i < 4; i++) {
+    motors.size = 4;
+    motors.elements = 0;
+
+    for (int i = 0; i < motors.size; i++) {
         motors.motors[i].id = -1;
     }
 
-    motors.elements = 0;
     three_wire_setup();
     two_wire_setup();
 }
@@ -235,7 +237,7 @@ void pbrick_motor_stop(uint8_t motor)
 
 void pbrick_motor_stop_all()
 {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < motors.size; i++) {
         uint8_t motorId = motors.motors[i].id;
         if (motorId != -1) {
             pbrick_motor_stop(motorId);
