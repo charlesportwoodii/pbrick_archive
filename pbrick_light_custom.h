@@ -20,6 +20,18 @@ void pbrick_light_custom_init();
  */
 void pbrick_light_custom_set(const uint8_t option[]);
 
+/**@brief Custom connection event
+ *
+ * @return void
+ */
+void pbrick_light_ble_connect();
+
+/**@brief Custom disconnection event
+ *
+ * @return void
+ */
+void pbrick_light_ble_disconnect();
+
 #ifdef __cplusplus
 }
 #endif

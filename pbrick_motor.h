@@ -5,58 +5,53 @@
 extern "C" {
 #endif
 
+#include "app_pwm.h"
 #include "pbrick_board.h"
-
-#if !defined(PBRICK_PWM0_P1) || !defined(PBRICK_PWM0_P1) || !defined(PBRICK_PWM0_PWM)
-#error "PBRICK_PWM0_P1, PBRICK_PWM0_P2, or PBRICK_PWM0_PWM is not defined. Check your board definition."
-#endif
 
 // PWM ready flag
 static volatile bool ready_flag;
 
-// Motor state
-struct pbrick_motor_state
+struct s_pbrick_motor_state
 {
-    uint8_t     direction;
-    uint8_t     speed;
+    uint8_t id;
+    uint8_t direction;
+    uint8_t speed;
+    uint8_t pins[2];
+    uint8_t channel;
+    const app_pwm_t   *driver;
 };
 
-// Motor 0 state
-typedef struct pbrick_motor_state pbrick_motor0_state;
+typedef struct s_pbrick_motors
+{
+    uint8_t elements;
+    struct s_pbrick_motor_state motors[4];
+} pbrick_motors;
 
-/**@brief Initializes motor0
+/**@brief Initializes motor
  *
  * @return      void
  */
-void pbrick_motor0_init();
+void pbrick_motor_init();
 
 /**@brief Sets the motor speed
  *
- * @param[in] uint8_t   direction       The motor direction 0x00 or 0x01
- * @param[in] uint8_t   pwm             The PWM percentage to apply
+ * @param[in] uint8_t   data    3 byte data { motorId, speed, direction }
  *
  * @return void
  */
-void pbrick_motor0_set(uint8_t direction, uint8_t pwm);
+void pbrick_motor_set(const uint8_t data[]);
 
-
-/**@brief Performs an immediate stop by shutting down input to PWM0 and PWM1
+/**@brief Performs an immediate stop by shutting down input the specified instance
  *
  * @return void
  */
-void pbrick_motor0_stop();
+void pbrick_motor_stop(uint8_t motor);
 
-/**@brief sets the motor in forward
+/**@brief Stops all PWM instances
  *
  * @return void
  */
-void pbrick_motor0_forward();
-
-/**@brief sets the motor in reverse
- *
- * @return void
- */
-void pbrick_motor0_reverse();
+void pbrick_motor_stop_all();
 
 #ifdef __cplusplus
 }

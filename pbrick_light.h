@@ -19,12 +19,11 @@ void pbrick_light_init();
 
 /**@brief Sets the lighting
  *
- * @param[in] uint8_t   light       The light to address
- * @param[in] uint8_t   option      Option for that light
+ * @param[in] uint8_t[] data    Event data
  *
  * @return void
  */
-void pbrick_light_set(uint8_t light, uint8_t option);
+void pbrick_light_set(const uint8_t option[]);
 
 /**@brief Disables all lighting
  *
@@ -85,6 +84,18 @@ void pbrick_light_hazard_blink();
  * @return void
  */
 void pbrick_light_left_blink();
+
+/**@brief Custom disconnection event
+ *
+ * @return void
+ */
+void pbrick_light_ble_disconnect();
+
+/**@brief Custom connection event
+ *
+ * @return void
+ */
+void pbrick_light_ble_connect();
 
 /**@brief Blinks the right side lights
  *

@@ -5,8 +5,15 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
+#ifdef PBRICK_LIGHT_CUSTOM
+#include "pbrick_light_custom.h"
+#endif
+
 void pbrick_light_init()
 {
+#ifdef PBRICK_LIGHT_CUSTOM
+    pbrick_light_custom_init();
+#else
     NRF_LOG_INFO("Initializing lighting");
     bsp_board_init(BSP_INIT_LEDS);
     nrf_gpio_cfg_output(PBRICK_LIGHT_LEFT_FRONT);
@@ -45,12 +52,20 @@ void pbrick_light_init()
 
 #ifdef PBRICK_AUTO_LIGHTS_ON_AT_BOOT
     NRF_LOG_INFO("PBRICK_AUTO_LIGHTS_ON_AT_BOOT set. Enabling all available lighting.");
-    pbrick_light_set(0xFF, 0xFF);
+    uint8_t data[] = { 0xFF, 0xFF };
+    pbrick_light_set(data);
+#endif
 #endif
 }
 
-void pbrick_light_set(uint8_t light, uint8_t option)
+void pbrick_light_set(const uint8_t data[])
 {
+#ifdef PBRICK_LIGHT_CUSTOM
+    pbrick_light_custom_set(data);
+#else
+    uint8_t light = data[0];
+    uint8_t option = data[1];
+
     NRF_LOG_DEBUG("Set Lighting: Mode: %X Light: %X", light, option);
     if (light == 0x00 && option == 0x00) {
         pbrick_light_off();
@@ -90,6 +105,7 @@ void pbrick_light_set(uint8_t light, uint8_t option)
                 break;
         }
     }
+#endif
 }
 
 void pbrick_light_off()
@@ -253,6 +269,17 @@ void pbrick_light_left_blink()
 
     uint8_t count = (uint8_t)(sizeof(lights)/sizeof(lights[0]));
     return pbrick_light_blink(lights, count);
+}
+
+void pbrick_light_ble_connect()
+{
+    return;
+}
+
+void pbrick_light_ble_disconnect()
+{
+    uint8_t data[] = { 0x11, 0x01 };
+    return pbrick_light_set(data);
 }
 
 void pbrick_light_right_blink()
