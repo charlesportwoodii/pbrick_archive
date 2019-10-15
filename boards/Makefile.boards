@@ -1,6 +1,24 @@
+PROJECT_NAME     := pbrick
 TARGETS          := nrf52840_xxaa
+OUTPUT_DIRECTORY := _build
 
+DEBUG ?= 0
+SD_REQ := 0xB6
+
+GIT_VERSION := $(shell git describe --always --tags)
+BOARD_DIST := $(BOARD)_pbrick--$(GIT_VERSION)
+
+ifeq ($(DEBUG), 1)
 GIT_VERSION = $(shell git describe --dirty --always --tags)
+BOARD_DIST := debug_$(BOARD)_pbrick-$(GIT_VERSION)
+endif
+
+BUILD_NUMBER := 1
+
+ifdef TRAVIS_TAG
+BUILD_NUMBER := $(shell python $(TRAVIS_BUILD_DIR)/blver.py --toHex=$(TRAVIS_TAG))
+$(info HEX_REVISION=$(BUILD_NUMBER))
+endif
 
 SDK_ROOT := $(NORDIC_SDK_PATH)
 PROJ_DIR := $(CURDIR)/../../..
@@ -8,8 +26,13 @@ BOARD_DIR := $(CURDIR)
 BOARD_NAME := $(notdir $(patsubst %/,%,$(dir $(CURDIR))))
 OUTPUT_DIRECTORY := $(PROJ_DIR)/_build_$(BOARD_NAME)
 
+ifeq ($(DEBUG), 1)
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
   LINKER_SCRIPT  := $(BOARD_DIR)/../../pbrick_gcc_nrf52.ld
+else
+$(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
+  LINKER_SCRIPT  := $(BOARD_DIR)/../../pbrick_gcc_nrf52.ld
+endif
 
 # Source files common to all targets
 SRC_FILES += \
@@ -340,19 +363,6 @@ LIB_FILES += -lc -lnosys -lm
 
 # Default target - first one defined
 default: nrf52840_xxaa
-ifeq ($(PBRICK_DEBUG), 1)
-	@cp $(PROJ_DIR)/_build_$(BOARD_NAME)/nrf52840_xxaa.hex $(PROJ_DIR)/pbrick_$(BOARD_NAME)-$(GIT_VERSION)_debug_s140.hex
-else
-	@cp $(PROJ_DIR)/_build_$(BOARD_NAME)/nrf52840_xxaa.hex $(PROJ_DIR)/pbrick_$(BOARD_NAME)_$(GIT_VERSION)_s140.hex
-endif
-
-# Print all targets that can be built
-help:
-	@echo following targets are available:
-	@echo		nrf52840_xxaa - Builds the application for a given BOARD
-	@echo		dfu-package   - Creates a DFU ZIP package
-	@echo		sdk_config    - Starts external tool for editing sdk_config.h
-	@echo		flash         - Flashes the binary to SERIAL_PORT
 
 TEMPLATE_PATH := $(SDK_ROOT)/components/toolchain/gcc
 
@@ -360,21 +370,26 @@ include $(TEMPLATE_PATH)/Makefile.common
 
 $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
-.PHONY: erase
+flash: dfu_package
+	@echo Flashing: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex
+	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/$(BOARD_DIST)_s140.hex --sectoranduicrerase
+
+usb_flash: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
+ifndef PORT
+	$(error PORT must be defined to perform usb serial flashing)
+endif
+	nrfutil dfu usb-serial -pkg $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip -p $(PORT)
+
+$(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip: default
+	nrfutil pkg generate --sd-req $(SD_REQ) --hw-version 52 --key-file $(PROJ_DIR)/private.pem --application-version $(BUILD_NUMBER) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
+
+dfu_package:  $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
+
 erase:
 	nrfjprog -f nrf52 --eraseall
 
-dfu-package: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex
-	@echo Packaging $<
-	adafruit-nrfutil dfu genpkg --sd-req 0xFFFE --dev-type 0x0052 --application $<  $(PROJ_DIR)/_build_$(BOARD_NAME)/dfu-package.zip
-
-flash: $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex dfu-package
-	@echo Flashing: $<
-	adafruit-nrfutil --verbose dfu serial --package $(PROJ_DIR)/_build_$(BOARD_NAME)/dfu-package.zip -p $(SERIAL_PORT) -b 115200  --flowcontrol --singlebank --touch 1200
-
-SDK_CONFIG_FILE := sdk_config.h
+SDK_CONFIG_FILE := ../config/sdk_config.h
 CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
-
 sdk_config:
 	java -jar $(CMSIS_CONFIG_TOOL) $(SDK_CONFIG_FILE)
 

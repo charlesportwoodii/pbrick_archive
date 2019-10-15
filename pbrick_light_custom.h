@@ -30,7 +30,7 @@ void pbrick_light_ble_connect();
  *
  * @return void
  */
-void pbrick_light_ble_disconnect();
+void pbrick_light_ble_disonnect();
 
 #ifdef __cplusplus
 }

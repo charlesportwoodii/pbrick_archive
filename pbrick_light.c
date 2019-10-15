@@ -271,16 +271,20 @@ void pbrick_light_left_blink()
     return pbrick_light_blink(lights, count);
 }
 
+#ifndef PBRICK_LIGHT_CUSTOM
 void pbrick_light_ble_connect()
 {
     return;
 }
+#endif
 
+#ifndef PBRICK_LIGHT_CUSTOM
 void pbrick_light_ble_disconnect()
 {
     uint8_t data[] = { 0x11, 0x01 };
     return pbrick_light_set(data);
 }
+#endif
 
 void pbrick_light_right_blink()
 {
