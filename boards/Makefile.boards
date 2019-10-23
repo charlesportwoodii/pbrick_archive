@@ -23,8 +23,7 @@ endif
 SDK_ROOT := $(NORDIC_SDK_PATH)
 PROJ_DIR := $(CURDIR)/../../..
 BOARD_DIR := $(CURDIR)
-BOARD_NAME := $(notdir $(patsubst %/,%,$(dir $(CURDIR))))
-OUTPUT_DIRECTORY := $(PROJ_DIR)/_build_$(BOARD_NAME)
+OUTPUT_DIRECTORY := $(PROJ_DIR)/_build_$(BOARD)
 
 ifeq ($(DEBUG), 1)
 $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
@@ -374,6 +373,14 @@ flash: dfu_package
 	@echo Flashing: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex
 	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/$(BOARD_DIST)_s140.hex --sectoranduicrerase
 
+
+flash: dfu_package
+	@echo Flashing: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex
+	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex --sectoranduicrerase
+ifeq ($(BOARD), "pca10059")
+  nrfjprog --memwr 0x10001304 --val 0xFFFFFFFD
+endif
+
 usb_flash: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
 ifndef PORT
 	$(error PORT must be defined to perform usb serial flashing)
@@ -383,14 +390,6 @@ endif
 $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip: default
 	nrfutil pkg generate --sd-req $(SD_REQ) --hw-version 52 --key-file $(PROJ_DIR)/private.pem --application-version $(BUILD_NUMBER) --application $(OUTPUT_DIRECTORY)/nrf52840_xxaa.hex $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
 
-dfu_package:  $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
-
-erase:
-	nrfjprog -f nrf52 --eraseall
-
-SDK_CONFIG_FILE := ../config/sdk_config.h
-CMSIS_CONFIG_TOOL := $(SDK_ROOT)/external_tools/cmsisconfig/CMSIS_Configuration_Wizard.jar
-sdk_config:
-	java -jar $(CMSIS_CONFIG_TOOL) $(SDK_CONFIG_FILE)
+dfu_package: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).zip
 
 .DELETE_ON_ERROR:
