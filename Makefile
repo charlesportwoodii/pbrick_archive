@@ -17,7 +17,7 @@ help:	## Lists all available commands and a brief description.
 all: check-env $(BOARD_LIST) ## Builds PBrick for all boards
 
 $(BOARD_LIST): ## Builds PBrick for a specific board
-	$(MAKE) -C boards/$@/s140
+	$(MAKE) -C boards/$@/s140 BOARD=$@
 
 flash: default ## Builds and flashes PBrick via nrfjprog
 	$(MAKE) flash -C boards/$(BOARD)/s140
