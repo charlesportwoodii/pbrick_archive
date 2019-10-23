@@ -371,11 +371,6 @@ $(foreach target, $(TARGETS), $(call define_target, $(target)))
 
 flash: dfu_package
 	@echo Flashing: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex
-	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/$(BOARD_DIST)_s140.hex --sectoranduicrerase
-
-
-flash: dfu_package
-	@echo Flashing: $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex
 	nrfjprog -f nrf52 --program $(OUTPUT_DIRECTORY)/$(BOARD_DIST).hex --sectoranduicrerase
 ifeq ($(BOARD), "pca10059")
   nrfjprog --memwr 0x10001304 --val 0xFFFFFFFD
