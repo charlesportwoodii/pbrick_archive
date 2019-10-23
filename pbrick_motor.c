@@ -125,34 +125,15 @@ void pbrick_motor_set(const uint8_t data[])
     motors.motors[motor].speed = pwm;
 
     // For PWM0, set the channel and speed directly since PWM just controls the speed
-    if (motorId == 1 || motorId == 2) {
-        while (app_pwm_channel_duty_set(driver, channel, abs(motors.motors[motor].speed)) == NRF_ERROR_BUSY);
-    }
+    while (app_pwm_channel_duty_set(driver, channel, abs(motors.motors[motor].speed)) == NRF_ERROR_BUSY);
+
 
     if (direction == 0x00) {
-        // Forward direction, for PWM0, swap pin states
-        if (motorId == 1 || motorId == 2) {
-            nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
-            nrf_gpio_pin_set(motors.motors[motor].pins[1]);
-        }
-
-        // For PWM1, PWM2, set the driver channel to 0 and speed
-        if (motorId == 3 || motorId == 4) {
-            while (app_pwm_channel_duty_set(driver, 1, 0) == NRF_ERROR_BUSY);
-            while (app_pwm_channel_duty_set(driver, 0, abs(motors.motors[motor].speed)) == NRF_ERROR_BUSY);
-        }
+        nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
+        nrf_gpio_pin_set(motors.motors[motor].pins[1]);
     } else if (direction == 0x01) {
-        // Reverse direction, for PWM0, swap pin states
-        if (motorId == 1 || motorId == 2) {
-            nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
-            nrf_gpio_pin_set(motors.motors[motor].pins[1]);
-        }
-
-        // For PWM1, PWM2, set the driver channel to sped and 0
-        if (motorId == 3 || motorId == 4) {
-            while (app_pwm_channel_duty_set(driver, 0, 0) == NRF_ERROR_BUSY);
-            while (app_pwm_channel_duty_set(driver, 1, abs(motors.motors[motor].speed)) == NRF_ERROR_BUSY);
-        }
+        nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
+        nrf_gpio_pin_set(motors.motors[motor].pins[1]);
     } else {
         NRF_LOG_WARNING("%X motor direction is not defined", direction);
     }
@@ -176,11 +157,8 @@ void pbrick_motor_stop(uint8_t motor)
     // Disable the PWM instance
     app_pwm_disable(driver);
 
-    // For 3 wire configuration, clear the GPIO pins
-    if (motorId == 1 || motorId == 2) {
-        nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
-        nrf_gpio_pin_clear(motors.motors[motor].pins[1]);
-    }
+    nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
+    nrf_gpio_pin_clear(motors.motors[motor].pins[1]);
 
     // Set the motor state
     uint8_t data[] = { motor, 0x00, 0x00 };
