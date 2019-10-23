@@ -25,7 +25,7 @@ typedef struct s_pbrick_motors
 {
     uint8_t elements;
     uint8_t size;
-    struct s_pbrick_motor_state motors[4];
+    struct s_pbrick_motor_state motors[2];
 } pbrick_motors;
 
 /**@brief Initializes motor
