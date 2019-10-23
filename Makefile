@@ -20,16 +20,16 @@ $(BOARD_LIST): ## Builds PBrick for a specific board
 	$(MAKE) -C boards/$@/s140 BOARD=$@
 
 flash: default ## Builds and flashes PBrick via nrfjprog
-	$(MAKE) flash -C boards/$(BOARD)/s140
+	$(MAKE) flash -C boards/$(BOARD)/s140 BOARD=$@
 
 clean_build: clean default ## Performs a clean build and generates a .zip DFU package
-	$(MAKE) -C boards/$(BOARD)/s140 dfu_package
+	$(MAKE) -C boards/$(BOARD)/s140 dfu_package BOARD=$@
 
 clean_flash: clean_build ## Performs a clean build and flashes a .zip DFU package
-	$(MAKE) -C boards/$(BOARD)/s140 erase flash
+	$(MAKE) -C boards/$(BOARD)/s140 erase flash BOARD=$@
 
 usb_flash: check_port default ## Flash the specified firmware to PORT
-	$(MAKE) -C boards/$(BOARD)/s140 usb_flash
+	$(MAKE) -C boards/$(BOARD)/s140 usb_flash BOARD=$@
 
 clean: check-env ## Cleans the build environment
 ifneq ($(filter $(BOARD),$(BOARD_LIST)),)
