@@ -65,21 +65,21 @@ static void setup()
     motor_setup(motor_pins2, &PWM0, 2, 1);
 #endif
 
-#if defined(PBRICK_PWM0_P1) && defined(PBRICK_PWM0_P2) && !defined(PBRICK_PWM1_P1) && !defined(PBRICK_PWM1_P2)
+#if defined(PBRICK_PWM0_P1) && defined(PBRICK_PWM0_P2) && (!defined(PBRICK_PWM1_P1) || !defined(PBRICK_PWM1_P2))
     // If PWM0_P1 and PWM0_P2 are the only pins setup, create a single channel PWM config
     app_pwm_config_t pwm_cfg = APP_PWM_DEFAULT_CONFIG_1CH(5000L, PBRICK_PWM0_PWM);
     pwm_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
 
-    ret_code_t err_code = app_pwm_init(&PWM0, &pwm_cfg,pwm_ready_callback);
+    ret_code_t err_code = app_pwm_init(&PWM0, &pwm_cfg, pwm_ready_callback);
     APP_ERROR_CHECK(err_code);
     app_pwm_enable(&PWM0);
-#elif defined(PBRICK_PWM0_P1) && defined(PBRICK_PWM0_P2) && defined(PBRICK_PWM1_P1) && defined(PBRICK_PWM1_P2)
+#elif defined(PBRICK_PWM0_P1) && defined(PBRICK_PWM0_P2) && (defined(PBRICK_PWM1_P1) && defined(PBRICK_PWM1_P2))
     // If PWM0_P1 and PWM0_P2 and PWM1_P1 and PWM1_P2 are setup, create a dual channel PWM config
     app_pwm_config_t pwm_cfg = APP_PWM_DEFAULT_CONFIG_2CH(5000L, PBRICK_PWM0_PWM, PBRICK_PWM1_PWM);
     pwm_cfg.pin_polarity[0] = APP_PWM_POLARITY_ACTIVE_HIGH;
     pwm_cfg.pin_polarity[1] = APP_PWM_POLARITY_ACTIVE_HIGH;
 
-    ret_code_t err_code = app_pwm_init(&PWM0, &pwm_cfg,pwm_ready_callback);
+    ret_code_t err_code = app_pwm_init(&PWM0, &pwm_cfg, pwm_ready_callback);
     APP_ERROR_CHECK(err_code);
     app_pwm_enable(&PWM0);
 #endif
