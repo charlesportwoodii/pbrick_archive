@@ -17,7 +17,7 @@ help:	## Lists all available commands and a brief description.
 all: check-env $(BOARD_LIST) ## Builds PBrick for all boards
 
 $(BOARD_LIST): ## Builds PBrick for a specific board
-	$(MAKE) -C boards/$@/s140 BOARD=$@
+	$(MAKE) -C boards/$@/s140 BOARD=$@ default
 
 flash: default ## Builds and flashes PBrick via nrfjprog
 	$(MAKE) flash -C boards/$(BOARD)/s140 BOARD=$@
@@ -31,16 +31,18 @@ clean_flash: clean_build ## Performs a clean build and flashes a .zip DFU packag
 usb_flash: check_port default ## Flash the specified firmware to PORT
 	$(MAKE) -C boards/$(BOARD)/s140 usb_flash BOARD=$@
 
-clean: check-env ## Cleans the build environment
+clean: check-env ## Cleans the environment for the specified board
 ifneq ($(filter $(BOARD),$(BOARD_LIST)),)
 	@cd boards/$(BOARD)/s140 && $(MAKE) clean
 	@rm -rf $(BOARD).hex
-	@rm -f $(BOARD).zip
-	@rm -f debug_$(BOARD).zip
+	@rm -f $(BOARD)_s140.zip
+	@rm -f debug_$(BOARD)_s140.zip
+	@rm -rf _build_$(BOARD)
 else
 	@for board in $(BOARD_LIST); do \
 		cd boards/$$board/s140 && $(MAKE) clean; \
 		cd ../../..; \
+		rm -rf _build_$$board; \
 	done
 	@rm -f *.hex
 	@rm -f *.zip
