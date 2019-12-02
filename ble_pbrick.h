@@ -28,7 +28,7 @@ NRF_SDH_BLE_OBSERVER(_name ## _obs, \
 #define PBRICK_SERIVCE_UUID     0x7062
 
 #define PBRICK_MOTOR_CHAR_UUID  0x7063
-#define PBRICK_LIGHT_CHAR_UUID  0x7064
+/*#define PBRICK_LIGHT_CHAR_UUID  0x7064*/
 
 /**@brief Custom Service init structure.
  *        This contains all options and data needed for
@@ -80,15 +80,6 @@ uint32_t ble_pbrick_init(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pb
  * @return      NRF_SUCCESS on success, otherwise an error code.
  */
 uint32_t motor_char_add(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pbrick_init);
-
-/**@brief Function for adding motor control characteristic
- *
- * @param[in]   p_pbrick        Custom Service structure.
- * @param[in]   p_pbrick_init   Information needed to initialize the service.
- *
- * @return      NRF_SUCCESS on success, otherwise an error code.
- */
-uint32_t light_char_add(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pbrick_init);
 
 /**@brief Function for handling the Application's BLE Stack events.
  *
