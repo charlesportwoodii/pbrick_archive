@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-#ifdef PBRICK_DEBUG
+#ifdef DEBUG
 
 #ifndef NRF_LOG_DEFAULT_LEVEL
 #define NRF_LOG_DEFAULT_LEVEL 4
@@ -35,7 +35,7 @@ extern "C" {
 #define NRF_SDH_LOG_LEVEL 4
 #endif
 
-#endif // PBRICK_DEBUG
+#endif // DEBUG
 
 #ifdef __cplusplus
 }
