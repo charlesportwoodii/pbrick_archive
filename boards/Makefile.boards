@@ -268,12 +268,7 @@ INC_FOLDERS += \
 LIB_FILES += \
 
 # Optimization flags
-ifeq ($(DEBUG), 1)
-OPT = -O0 -ggdb
-else
 OPT = -O3 -g3
-OPT += -flto
-endif
 
 # C flags common to all targets
 CFLAGS += $(OPT)

@@ -22,23 +22,3 @@ if [ -z "$(ls -A $HOME/nrf_sdk/16.0.0)" ]; then
 else
     echo "nRF5 SDK is already installed."
 fi
-
-if [ -z "$(ls -A $HOME/mergehex)" ]; then
-    cd $HOME
-    wget https://www.nordicsemi.com/api/sitecore/Products/DownloadPlatform --post-data=fileid=8F19D314130548209E75EFFADD9348DB -O cli-tools.tar
-    tar -xf cli-tools.tar
-else
-    echo "nRF5 SDK CLI Tools is already installed."
-fi
-
-if [ -z "$(ls -A $HOME/nrf_sdk/16.0.0/external/micro-ecc/micro-ecc)" ]; then
-    ls -laht $HOME/nrf_sdk/16.0.0/external/micro-ecc
-    cd $HOME/nrf_sdk/16.0.0/external/micro-ecc
-    git clone https://github.com/kmackay/micro-ecc
-    chmod +x $HOME/nrf_sdk/16.0.0/external/micro-ecc/build_all.sh
-    dos2unix $HOME/nrf_sdk/16.0.0/external/micro-ecc/build_all.sh
-    ls -laht $HOME/nrf_sdk/16.0.0/external/micro-ecc/micro-ecc
-    ./build_all.sh
-else
-    echo "MicroECC is already installed."
-fi

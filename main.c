@@ -807,8 +807,6 @@ int main(void)
 
     log_init();
 
-    NRF_LOG_DEBUG("Logger init");
-
     // Initialize the async SVCI interface to bootloader before any interrupts are enabled.
     err_code = ble_dfu_buttonless_async_svci_init();
     APP_ERROR_CHECK(err_code);
@@ -823,8 +821,6 @@ int main(void)
     advertising_init();
     conn_params_init();
     peer_manager_init();
-
-    NRF_LOG_DEBUG("Application started...");
 
     // Start execution.
     application_timers_start();
