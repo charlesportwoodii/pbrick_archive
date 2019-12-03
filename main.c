@@ -721,10 +721,6 @@ static void advertising_init(void)
     init.advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
     init.advdata.uuids_complete.p_uuids  = m_adv_uuids;
 
-    init.config.ble_adv_fast_enabled  = true;
-    init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
-    init.config.ble_adv_fast_timeout  = APP_ADV_DURATION;
-
     advertising_config_get(&init.config);
 
     init.evt_handler = on_adv_evt;
@@ -821,7 +817,7 @@ static void idle_state_handle(void)
  */
 int main(void)
 {
-    bool       erase_bonds;
+    bool erase_bonds;
     ret_code_t err_code;
 
     log_init();
@@ -831,25 +827,22 @@ int main(void)
     APP_ERROR_CHECK(err_code);
 
     timers_init();
-    power_management_init();
     buttons_leds_init(&erase_bonds);
+    power_management_init();
     ble_stack_init();
-    peer_manager_init();
     gap_params_init();
     gatt_init();
-    advertising_init();
     services_init();
+    advertising_init();
     conn_params_init();
-
-    NRF_LOG_INFO("Buttonless DFU Application started.");
+    peer_manager_init();
 
     // Start execution.
     application_timers_start();
     advertising_start(erase_bonds);
 
     // Enter main loop.
-    for (;;)
-    {
+    for (;;) {
         idle_state_handle();
     }
 }
