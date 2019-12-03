@@ -87,6 +87,8 @@
 #include "nrf_log_default_backends.h"
 #include "nrf_bootloader_info.h"
 
+#include "ble_pbrick.h"
+
 #define DEVICE_NAME                     "PBRICK"                                    /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                       /**< Manufacturer. Will be passed to Device Information Service. */
 #define APP_ADV_INTERVAL                300                                         /**< The advertising interval (in units of 0.625 ms. This value corresponds to 187.5 ms). */
@@ -115,6 +117,7 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
+BLE_PBRICK_DEF(m_pbrick);
 
 NRF_BLE_GATT_DEF(m_gatt);                                                           /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                             /**< Context for the Queued Write module.*/
@@ -124,7 +127,9 @@ static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        
 static void advertising_start(bool erase_bonds);                                    /**< Forward declaration of advertising start function */
 
 // YOUR_JOB: Use UUIDs for service(s) used in your application.
-static ble_uuid_t m_adv_uuids[] = {{BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}};
+static ble_uuid_t m_adv_uuids[] = {
+    {PBRICK_SERIVCE_UUID, BLE_UUID_TYPE_VENDOR_BEGIN}
+};
 
 /**@brief Handler for shutdown preparation.
  *
@@ -142,27 +147,7 @@ static bool app_shutdown_handler(nrf_pwr_mgmt_evt_t event)
     {
         case NRF_PWR_MGMT_EVT_PREPARE_DFU:
             NRF_LOG_INFO("Power management wants to reset to DFU mode.");
-            // YOUR_JOB: Get ready to reset into DFU mode
-            //
-            // If you aren't finished with any ongoing tasks, return "false" to
-            // signal to the system that reset is impossible at this stage.
-            //
-            // Here is an example using a variable to delay resetting the device.
-            //
-            // if (!m_ready_for_reset)
-            // {
-            //      return false;
-            // }
-            // else
-            //{
-            //
-            //    // Device ready to enter
-            //    uint32_t err_code;
-            //    err_code = sd_softdevice_disable();
-            //    APP_ERROR_CHECK(err_code);
-            //    err_code = app_timer_stop_all();
-            //    APP_ERROR_CHECK(err_code);
-            //}
+            gpio_shutdown();
             break;
 
         default:
@@ -413,6 +398,7 @@ static void services_init(void)
     uint32_t                  err_code;
     nrf_ble_qwr_init_t        qwr_init  = {0};
     ble_dfu_buttonless_init_t dfus_init = {0};
+    ble_pbrick_init_t  pbrick_init;
 
     // Initialize Queued Write Module.
     qwr_init.error_handler = nrf_qwr_error_handler;
@@ -425,29 +411,13 @@ static void services_init(void)
     err_code = ble_dfu_buttonless_init(&dfus_init);
     APP_ERROR_CHECK(err_code);
 
-    /* YOUR_JOB: Add code to initialize the services used by the application.
-       uint32_t                           err_code;
-       ble_xxs_init_t                     xxs_init;
-       ble_yys_init_t                     yys_init;
+    memset(&pbrick_init, 0, sizeof(pbrick_init));
 
-       // Initialize XXX Service.
-       memset(&xxs_init, 0, sizeof(xxs_init));
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&pbrick_init.motor_char_attr_md.read_perm);
+    BLE_GAP_CONN_SEC_MODE_SET_OPEN(&pbrick_init.motor_char_attr_md.write_perm);
 
-       xxs_init.evt_handler                = NULL;
-       xxs_init.is_xxx_notify_supported    = true;
-       xxs_init.ble_xx_initial_value.level = 100;
-
-       err_code = ble_bas_init(&m_xxs, &xxs_init);
-       APP_ERROR_CHECK(err_code);
-
-       // Initialize YYY Service.
-       memset(&yys_init, 0, sizeof(yys_init));
-       yys_init.evt_handler                  = on_yys_evt;
-       yys_init.ble_yy_initial_value.counter = 0;
-
-       err_code = ble_yy_service_init(&yys_init, &yy_init);
-       APP_ERROR_CHECK(err_code);
-     */
+    err_code = ble_pbrick_init(&m_pbrick, &pbrick_init);
+    APP_ERROR_CHECK(err_code);
 }
 
 
@@ -740,16 +710,20 @@ static void bsp_event_handler(bsp_event_t event)
  */
 static void advertising_init(void)
 {
-    uint32_t               err_code;
+    ret_code_t             err_code;
     ble_advertising_init_t init;
 
     memset(&init, 0, sizeof(init));
 
     init.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
-    init.advdata.include_appearance      = true;
+    init.advdata.include_appearance      = false;
     init.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     init.advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
     init.advdata.uuids_complete.p_uuids  = m_adv_uuids;
+
+    init.config.ble_adv_fast_enabled  = true;
+    init.config.ble_adv_fast_interval = APP_ADV_INTERVAL;
+    init.config.ble_adv_fast_timeout  = APP_ADV_DURATION;
 
     advertising_config_get(&init.config);
 
