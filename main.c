@@ -57,6 +57,7 @@
 
 #include "nordic_common.h"
 #include "nrf.h"
+#include "nrf_delay.h"
 #include "app_error.h"
 #include "ble.h"
 #include "ble_hci.h"
@@ -131,6 +132,16 @@ static ble_uuid_t m_adv_uuids[] = {
     {PBRICK_SERIVCE_UUID, BLE_UUID_TYPE_VENDOR_BEGIN}
 };
 
+
+void HardFault_Handler(void)
+{
+    uint32_t *sp = (uint32_t *) __get_MSP(); // Get stack pointer
+    uint32_t ia = sp[12]; // Get instruction address from stack
+
+    printf("Hard Fault at address: 0x%08x\r\n", (unsigned int)ia);
+    while(1)
+        ;
+}
 /**@brief Handler for shutdown preparation.
  *
  * @details During shutdown procedures, this function will be called at a 1 second interval
