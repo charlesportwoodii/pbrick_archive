@@ -15,15 +15,19 @@ env:
   matrix:
     - BOARD=sparkfun-pro-mini # Release
     - BOARD=sparkfun-pro-mini DEBUG=1 # Debug
-    - BOARD=sparkfun-pro-mini DEBUG=1 PBRICK_CUSTOM=1 PBRICK_LIGHT_CUSTOM=1 # Debug with custom functionality
 
     - BOARD=mdk-usb-dongle # Release
     - BOARD=mdk-usb-dongle DEBUG=1 # Debug
-    - BOARD=mdk-usb-dongle DEBUG=1 PBRICK_CUSTOM=1 PBRICK_LIGHT_CUSTOM=1 # Debug with custom functionality
+
+    - BOARD=mdk # Release
+    - BOARD=mdk DEBUG=1 # Debug
 
     - BOARD=pca10059 # Release
     - BOARD=pca10059 DEBUG=1 # Debug
-    - BOARD=pca10059 DEBUG=1 PBRICK_CUSTOM=1 PBRICK_LIGHT_CUSTOM=1 # Debug with custom functionality
+
+    - BOARD=pbrick # Release
+    - BOARD=pbrick DEBUG=1 # Debug
+
 
 before_install:
   - chmod +x $TRAVIS_BUILD_DIR/.travis/before_install.sh

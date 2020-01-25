@@ -6,6 +6,8 @@ extern "C" {
 #endif
 
 
+#ifdef DEBUG
+
 #ifndef NRF_LOG_ENABLED
 #define NRF_LOG_ENABLED 1
 #endif
@@ -65,6 +67,8 @@ extern "C" {
 #ifndef SEGGER_RTT_CONFIG_DEFAULT_MODE
 #define SEGGER_RTT_CONFIG_DEFAULT_MODE 0
 #endif
+
+#endif // DEBUG
 
 #ifdef __cplusplus
 }

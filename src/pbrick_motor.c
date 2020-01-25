@@ -2,7 +2,6 @@
 #include "nrf_gpio.h"
 #include "nrf_delay.h"
 #include "nrf_log.h"
-#include "nrf_log_ctrl.h"
 #include "pbrick_motor.h"
 #include "pbrick_board.h"
 
@@ -18,8 +17,6 @@ pbrick_motors motors;
  */
 static void pwm_ready_callback(uint32_t pwm_id)
 {
-    NRF_LOG_DEBUG("PWM is now ready");
-    NRF_LOG_FLUSH();
     ready_flag = true;
 }
 
