@@ -94,35 +94,22 @@ void pbrick_motor_init()
     setup();
 }
 
-void pbrick_motor_set(const uint8_t data[])
+static void pbrick_motor_set_internal(uint8_t motor, uint8_t direction, uint8_t pwm)
 {
-    uint8_t motor = data[0];
+    motors.motors[motor].direction = direction;
+    motors.motors[motor].speed = pwm;
+    uint8_t channel = motors.motors[motor].channel;
     uint8_t motorId = motors.motors[motor].id;
 
-    // If the requested motor does not have a valid definition, abort
-    if (motorId == -1) {
-        NRF_LOG_INFO("Motor ID %d is not defined and settings could not be changed.", motorId);
-        return;
-    }
-
-    uint8_t pwm = data[1];
-    uint8_t direction = data[2];
-    uint8_t channel = motors.motors[motor].channel;
     const app_pwm_t *driver = motors.motors[motor].driver;
 
     int speed = (int)pwm;
     if (speed > 100) {
-        NRF_LOG_INFO("Adjusting speed %x in excess of 100 to 100", speed)
+        NRF_LOG_INFO("Adjusting speed %x in excess to 100", speed)
         speed = 100;
     }
 
-    // Log the motor states
-    motors.motors[motor].direction = direction;
-    motors.motors[motor].speed = pwm;
-
-    // For PWM0, set the channel and speed directly since PWM just controls the speed
     while (app_pwm_channel_duty_set(driver, channel, abs(motors.motors[motor].speed)) == NRF_ERROR_BUSY);
-
 
     if (direction == 0x00) {
         nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
@@ -135,6 +122,42 @@ void pbrick_motor_set(const uint8_t data[])
     }
 
     NRF_LOG_DEBUG("Set Motor %d: Direction: %X Speed: %X", motorId, direction, speed);
+}
+
+
+void pbrick_motor_set(const uint8_t data[])
+{
+    uint8_t motor = data[0];
+    uint8_t pwm = data[1];
+    uint8_t direction = data[2];
+
+    // For PWM0, set the channel and speed directly since PWM just controls the speed
+    if (motor == 0x00 || motor == 0x01) {
+        pbrick_motor_set_internal(motor, direction, pwm);
+    } else {
+#if defined(PBRICK_PWM0_PWM) && defined(PBRICK_PWM1_PWM)
+        // Motor startup needs to be in sync - stoping all motors then disabling PWM
+        pbrick_motor_stop_all();
+        const app_pwm_t *driver = motors.motors[motor].driver;
+        app_pwm_disable(driver);
+
+        if (motor == 0x02) {
+            // Set both motors to operate in the same rotational direction
+            pbrick_motor_set_internal(0x00, direction, pwm);
+            pbrick_motor_set_internal(0x01, direction, pwm);
+        } else if (motor == 0x03) {
+            // Set both motors to operate in opposite directions
+            pbrick_motor_set_internal(0x00, direction, pwm);
+            pbrick_motor_set_internal(0x01, (direction ^ 0x01), pwm);
+        } else {
+            NRF_LOG_WARNING("Motor Option (%X) is not defined", motor);
+        }
+
+        app_pwm_enable(driver);
+#else
+        NRF_LOG_WARNING("Dual channel motor not setup. Unable to set.")
+#endif
+    }
 }
 
 void pbrick_motor_stop(uint8_t motor)

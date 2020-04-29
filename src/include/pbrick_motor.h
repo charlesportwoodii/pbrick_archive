@@ -34,7 +34,7 @@ typedef struct s_pbrick_motors
  */
 void pbrick_motor_init();
 
-/**@brief Sets the motor speed
+/**@brief Public interface to set a motor
  *
  * @param[in] uint8_t   data    3 byte data { motorId, speed, direction }
  *
