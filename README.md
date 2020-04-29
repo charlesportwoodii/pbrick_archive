@@ -13,7 +13,7 @@ Complete documentation for board support, adding new boards, compiling, and more
 1. Burn the [Kaidyth nRF52 Bootloader](https://github.com/charlesportwoodii/kaidyth_nrf52_bootloader/releases) using `nrfjprog`. Grab a hex/zip for your supported board.
 
     ```
-        nrfjprog -f nrf52 --erase
+    nrfjprog -f nrf52 --erase
     nrfjprog -f nrf52 --program nrf52840_xxaa_s140_<board>.hex
 
     # For PCA10059 reset UICR before resetting

@@ -128,8 +128,8 @@ void pbrick_motor_set(const uint8_t data[])
         nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
         nrf_gpio_pin_set(motors.motors[motor].pins[1]);
     } else if (direction == 0x01) {
-        nrf_gpio_pin_clear(motors.motors[motor].pins[0]);
-        nrf_gpio_pin_set(motors.motors[motor].pins[1]);
+        nrf_gpio_pin_clear(motors.motors[motor].pins[1]);
+        nrf_gpio_pin_set(motors.motors[motor].pins[0]);
     } else {
         NRF_LOG_WARNING("%X motor direction is not defined", direction);
     }
