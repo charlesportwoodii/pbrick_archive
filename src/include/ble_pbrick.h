@@ -81,15 +81,6 @@ uint32_t ble_pbrick_init(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pb
  */
 uint32_t motor_char_add(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pbrick_init);
 
-/**@brief Function for adding motor control characteristic
- *
- * @param[in]   p_pbrick        Custom Service structure.
- * @param[in]   p_pbrick_init   Information needed to initialize the service.
- *
- * @return      NRF_SUCCESS on success, otherwise an error code.
- */
-uint32_t light_char_add(ble_pbrick_t * p_pbrick, const ble_pbrick_init_t * p_pbrick_init);
-
 /**@brief Function for handling the Application's BLE Stack events.
  *
  * @details Handles all events from the BLE stack of interest to the Service
