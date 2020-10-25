@@ -223,6 +223,11 @@ CFLAGS += -DDEBUG
 ASMFLAGS += -DDEBUG
 endif
 
+ifeq ($(BOARD_USE_SF_CLOCK), 1)
+CFLAGS += -DBOARD_USE_SF_CLOCK=1
+ASMFLAGS += -DBOARD_USE_SF_CLOCK=
+endif
+
 # Linker flags
 LDFLAGS += $(OPT)
 LDFLAGS += -mthumb -mabi=aapcs -L$(SDK_ROOT)/modules/nrfx/mdk -T$(LINKER_SCRIPT)

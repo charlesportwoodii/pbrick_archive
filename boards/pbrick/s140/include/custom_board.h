@@ -37,9 +37,9 @@ extern "C" {
 // LEDs definitions for nRF52840-MDK
 #define LEDS_NUMBER    3
 
-#define LED_1          NRF_GPIO_PIN_MAP(0, 30) // Blue
-#define LED_2          NRF_GPIO_PIN_MAP(0, 31) // Green
-#define LED_3          NRF_GPIO_PIN_MAP(0, 04) // Red
+#define LED_1          NRF_GPIO_PIN_MAP(0, 2) // Blue
+#define LED_2          NRF_GPIO_PIN_MAP(0, 19) // Green
+#define LED_3          NRF_GPIO_PIN_MAP(0, 22) // Red
 #define LED_START      LED_1
 #define LED_STOP       LED_3
 
